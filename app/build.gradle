@@ -1,4 +1,7 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 25
@@ -13,7 +16,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -27,4 +30,21 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
+
+    // Kotlin
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+
+    // Shared Preferences
+    compile 'com.orhanobut:hawk:2.0.1'
+
+    // Rounded Image View
+    compile 'com.makeramen:roundedimageview:2.2.1'
+
+    // Libraries to load pics from external storage, camera, or the web
+    compile 'com.github.jkwiecien:EasyImage:2.0.2'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+
+    // Room
+    compile "android.arch.persistence.room:rxjava2:1.0.0-alpha4"
+    annotationProcessor "android.arch.persistence.room:compiler:1.0.0-alpha4"
 }
