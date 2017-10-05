@@ -2,8 +2,17 @@
     <string name="app_name">Contacts</string>
 
     <!--
+        Home
+    -->
+    <string name="search">Search</string>
+
+    <!--
         Contact Details
     -->
     <string name="delete_contact">Delete Contact</string>
-    <string name="search">Search</string>
+
+    <!--
+        Add Contact
+    -->
+    <string name="contact_name">Contact Name</string>
 </resources>

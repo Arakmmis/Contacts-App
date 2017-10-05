@@ -4,10 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.view.View
 import kotlinx.android.synthetic.main.home_activity.*
 import me.arakmmis.contactsapp.R
 import me.arakmmis.contactsapp.businesslogic.models.Contact
 import me.arakmmis.contactsapp.mvpcontracts.HomeContract
+import me.arakmmis.contactsapp.ui.addContact.AddContactActivity
 import me.arakmmis.contactsapp.ui.contactdetails.ContactDetailsActivity
 import me.arakmmis.contactsapp.ui.home.adapter.ContactsAdapter
 import me.arakmmis.contactsapp.utils.Callback
@@ -44,5 +46,9 @@ class HomeActivity : AppCompatActivity(), HomeContract.HomeView, Callback<Contac
         val intent = Intent(this@HomeActivity, ContactDetailsActivity::class.java)
         intent.putExtra(Const.CONTACT_KEY, item)
         startActivity(intent)
+    }
+
+    fun addContact(v: View) {
+        startActivity(Intent(this@HomeActivity, AddContactActivity::class.java))
     }
 }
