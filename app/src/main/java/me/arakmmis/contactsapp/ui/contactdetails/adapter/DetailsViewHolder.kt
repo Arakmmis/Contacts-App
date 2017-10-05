@@ -3,8 +3,8 @@ package me.arakmmis.contactsapp.ui.contactdetails.adapter
 import android.content.Intent
 import android.net.Uri
 import android.support.v4.content.ContextCompat
+import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import kotlinx.android.synthetic.main.contact_details_rv_item_address.view.*
@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.contact_details_rv_item_phone_number.view.
 import me.arakmmis.contactsapp.businesslogic.models.Address
 import me.arakmmis.contactsapp.businesslogic.models.EmailAddress
 import me.arakmmis.contactsapp.businesslogic.models.PhoneNumber
+
 
 class DetailsViewHolder<T>(itemView: View?) : RecyclerView.ViewHolder(itemView) {
 
@@ -28,8 +29,6 @@ class DetailsViewHolder<T>(itemView: View?) : RecyclerView.ViewHolder(itemView) 
     }
 
     private fun initPNView(phoneNumber: PhoneNumber) {
-        Log.d("DVH: PN", "PN: " + phoneNumber.number + "PN Type: " +phoneNumber.type)
-
         itemView?.tv_phone_number?.text = phoneNumber.number
         itemView?.tv_phone_number_type?.text = phoneNumber.type
 
@@ -46,11 +45,13 @@ class DetailsViewHolder<T>(itemView: View?) : RecyclerView.ViewHolder(itemView) 
                 return true
             }
         })
+
+        itemView?.iv_message?.setOnClickListener { _ ->
+            startActivity(itemView.context, Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", phoneNumber.number, null)), null)
+        }
     }
 
     private fun initEAView(emailAddress: EmailAddress) {
-        Log.d("DVH: EA", "EA: " + emailAddress.emailAddress + "EA Type: " + emailAddress.type)
-
         itemView?.tv_email_address?.text = emailAddress.emailAddress
         itemView?.tv_email_address_type?.text = emailAddress.type
 
@@ -61,8 +62,6 @@ class DetailsViewHolder<T>(itemView: View?) : RecyclerView.ViewHolder(itemView) 
     }
 
     private fun initAddressView(address: Address) {
-        Log.d("DVH: A", "A: " + address.address + "A Type: " + address.type)
-
         itemView?.tv_address?.text = address.address
         itemView?.tv_address_type?.text = address.type
 
