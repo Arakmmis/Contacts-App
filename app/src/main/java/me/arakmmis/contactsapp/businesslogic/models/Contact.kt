@@ -1,4 +1,4 @@
-package me.arakmmis.contactsapp.businesslogic.contacts
+package me.arakmmis.contactsapp.businesslogic.models
 
 import java.io.Serializable
 import java.util.*
@@ -9,7 +9,7 @@ import java.util.*
 data class Contact(val id: String,
                    val profilePic: String,
                    val name: String,
-                   val phoneNumbers: List<String>,
+                   val phoneNumbers: List<PhoneNumber>,
                    val defaultPhoneNumber: String,
-                   val addresses: List<String> = Arrays.asList(),
-                   val emailAddresses: List<String>) : Serializable
+                   val addresses: List<Address> = Arrays.asList(),
+                   val emailAddresses: List<EmailAddress>) : Serializable

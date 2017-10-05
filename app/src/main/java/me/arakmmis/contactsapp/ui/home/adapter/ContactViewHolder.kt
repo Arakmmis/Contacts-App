@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.home_rv_item_contact.view.*
-import me.arakmmis.contactsapp.businesslogic.contacts.Contact
+import me.arakmmis.contactsapp.businesslogic.models.Contact
 import me.arakmmis.contactsapp.utils.Callback
 
 

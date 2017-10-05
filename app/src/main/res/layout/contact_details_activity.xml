@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context=".ui.contactdetails.ContactDetailsActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:elevation="8dp"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_edit_contact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:onClick="editContact"
+        android:src="@drawable/ic_edit_black_24dp"
+        android:tint="@android:color/white"
+        app:fabSize="normal"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/iv_profile_pic_background"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:src="@drawable/profile_pic_background"/>
+
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/iv_contact_pic"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="56dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/placeholder_profile_pic"
+                app:riv_border_color="@color/colorPrimary"
+                app:riv_border_width="2dp"
+                app:riv_corner_radius="100dp"/>
+
+            <TextView
+                android:id="@+id/tv_contact_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/iv_contact_pic"
+                android:layout_gravity="bottom"
+                android:layout_marginTop="16dp"
+                android:paddingEnd="32dp"
+                android:paddingStart="32dp"
+                android:text="Naruto Uzumaki"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="26sp"/>
+
+            <RelativeLayout
+                android:id="@+id/rl_phone_numbers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_contact_name"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp">
+
+                <ImageView
+                    android:id="@+id/iv_call"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="24dp"
+                    android:src="@drawable/ic_call_black_24dp"
+                    android:tint="@color/light_violet"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_phone_numbers"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@id/iv_call"/>
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/divider_horizontal_1"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_below="@id/rl_phone_numbers"
+                android:layout_marginStart="72dp"
+                android:background="@color/super_light_grey"/>
+
+            <RelativeLayout
+                android:id="@+id/rl_email_addresses"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/divider_horizontal_1"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp">
+
+                <ImageView
+                    android:id="@+id/iv_email_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="24dp"
+                    android:src="@drawable/ic_email_black_24dp"
+                    android:tint="@color/light_violet"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_email_addresses"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@id/iv_email_address"/>
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/divider_horizontal_2"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_below="@id/rl_email_addresses"
+                android:layout_marginStart="72dp"
+                android:background="@color/super_light_grey"/>
+
+            <RelativeLayout
+                android:id="@+id/rl_addresses"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/divider_horizontal_2"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp">
+
+                <ImageView
+                    android:id="@+id/iv_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="24dp"
+                    android:src="@drawable/ic_home_black_24dp"
+                    android:tint="@color/light_violet"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_addresses"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@id/iv_address"/>
+            </RelativeLayout>
+        </RelativeLayout>
+    </ScrollView>
+</android.support.design.widget.CoordinatorLayout>

@@ -1,6 +1,6 @@
 package me.arakmmis.contactsapp.mvpcontracts
 
-import me.arakmmis.contactsapp.businesslogic.contacts.Contact
+import me.arakmmis.contactsapp.businesslogic.models.Contact
 
 /**
  * Created by arakm on 10/4/2017.
