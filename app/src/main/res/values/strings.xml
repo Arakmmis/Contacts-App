@@ -16,4 +16,7 @@
     -->
     <string name="contact_name">Contact Name</string>
     <string name="click_to_pick_date_of_birth">Click to Pick Date of Birth</string>
+    <string name="dialog_choose_upload_method_title">Upload Via</string>
+    <string name="dialog_choose_upload_method_option_1">Take A Picture</string>
+    <string name="dialog_choose_upload_method_option_2">Gallery</string>
 </resources>
