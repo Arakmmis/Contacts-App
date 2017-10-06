@@ -43,6 +43,8 @@ class ContactDetailsActivity : AppCompatActivity(), ContactDetailsContract.Conta
     private fun initUI() {
         tv_contact_name.text = contact.name
 
+        tv_birth_date.text = contact.dateOfBirth
+
         rv_phone_numbers.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         rv_phone_numbers.isNestedScrollingEnabled = false
         rv_phone_numbers.adapter = DetailsAdapter<PhoneNumber>(R.layout.contact_details_rv_item_phone_number,

@@ -9,6 +9,7 @@ import java.util.*
 data class Contact(val id: String,
                    val profilePic: String,
                    val name: String,
+                   val dateOfBirth: String,
                    val phoneNumbers: List<PhoneNumber>,
                    val defaultPhoneNumber: String,
                    val addresses: List<Address> = Arrays.asList(),

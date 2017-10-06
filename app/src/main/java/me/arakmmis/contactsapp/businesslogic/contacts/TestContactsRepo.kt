@@ -19,6 +19,7 @@ class TestContactsRepo : ContactsManager {
                     Contact(
                             id = "1",
                             name = "Abdel Rahman Abdel Kader",
+                            dateOfBirth = "20 Feb 1996",
                             profilePic = "",
                             phoneNumbers = Arrays.asList(PhoneNumber("+201127400311", "Work"), PhoneNumber("01127400311", "Other"),
                                     PhoneNumber("55525000", "School")),
@@ -30,6 +31,7 @@ class TestContactsRepo : ContactsManager {
                     Contact(
                             id = "2",
                             name = "Mohamed Ahmed",
+                            dateOfBirth = "1 Jan 1995",
                             profilePic = "",
                             phoneNumbers = Arrays.asList(PhoneNumber("01127498172", "Other"), PhoneNumber("+20191827111", "Home"),
                                     PhoneNumber("98021789042", "Home")),
@@ -40,6 +42,7 @@ class TestContactsRepo : ContactsManager {
                     Contact(
                             id = "3",
                             name = "Abdel Rahman El Ghamry",
+                            dateOfBirth = "22 Aug 1994",
                             profilePic = "",
                             phoneNumbers = Arrays.asList(PhoneNumber("+223896400311", "Work"), PhoneNumber("0192180123", "Work"),
                                     PhoneNumber("92361729836", "Work")),
@@ -50,6 +53,7 @@ class TestContactsRepo : ContactsManager {
                     Contact(
                             id = "4",
                             name = "Islam El Desoky",
+                            dateOfBirth = "1 Aug 1995",
                             profilePic = "",
                             phoneNumbers = Arrays.asList(PhoneNumber("+98162874962", "Work"), PhoneNumber("0507791448", "Home")),
                             defaultPhoneNumber = "0507791448",
@@ -62,6 +66,7 @@ class TestContactsRepo : ContactsManager {
                     Contact(
                             id = "5",
                             name = "Doha Mohammed Ammar",
+                            dateOfBirth = "5 May 1995",
                             profilePic = "",
                             phoneNumbers = Arrays.asList(PhoneNumber("01119868731", "Home")),
                             defaultPhoneNumber = "01119868731",
@@ -72,6 +77,7 @@ class TestContactsRepo : ContactsManager {
                     Contact(
                             id = "6",
                             name = "Sohaila Mohamed Ahmed Al Alem",
+                            dateOfBirth = "17 Dec 1995",
                             profilePic = "",
                             phoneNumbers = Arrays.asList(PhoneNumber("+1-518-555-0144", "Mobile"), PhoneNumber("518-555-0144", "Other"),
                                     PhoneNumber("518-555-0111", "Mobile"), PhoneNumber("+1-202-555-0163", "Work"), PhoneNumber("202-555-0163", "Work")),
@@ -82,6 +88,7 @@ class TestContactsRepo : ContactsManager {
                     Contact(
                             id = "7",
                             name = "Alaa Mostafa",
+                            dateOfBirth = "1 Jan 1995",
                             profilePic = "",
                             phoneNumbers = Arrays.asList(PhoneNumber("+1-518-555-0144", "Home")),
                             defaultPhoneNumber = "+1-518-555-0144",
