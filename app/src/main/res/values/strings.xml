@@ -15,4 +15,5 @@
         Add Contact
     -->
     <string name="contact_name">Contact Name</string>
+    <string name="click_to_pick_date_of_birth">Click to Pick Date of Birth</string>
 </resources>
