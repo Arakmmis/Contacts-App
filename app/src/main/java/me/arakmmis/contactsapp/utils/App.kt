@@ -11,5 +11,6 @@ class App : Application() {
         Hawk.init(this).build()
         Cache.removePhoneNumbers()
         Cache.removeAddress()
+        Cache.removeEmails()
     }
 }

@@ -90,11 +90,38 @@ class AddContactPresenter(private val addContactView: AddContactContract.AddCont
     }
 
     override fun addEmailAddress(email: EmailAddress) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val result = ValidationUtil.errorsInEmail(email.emailAddress)
+
+        if (result == ValidationUtil.NO_ERRORS) {
+            if (!Cache.getEmails().contains(email)) {
+
+                val newEmails = Cache.getEmails()
+
+                newEmails.add(email)
+                Cache.setEmails(newEmails)
+                addContactView.updateEmailAddressesList(newEmails)
+            } else {
+                addContactView.showEmailAddressError("Email Address already entered")
+            }
+        } else {
+            addContactView.showEmailAddressError(result)
+        }
     }
 
     override fun deleteEmailAddress(email: EmailAddress) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+        val itemToBeDeleted = Cache.getEmails().indexOf(email)
 
+        val newEmails: List<EmailAddress>
+
+        if (Cache.getEmails().size == 1) {
+            newEmails = ArrayList<EmailAddress>()
+        } else {
+            val emailsBeforeDeleted = Cache.getEmails().slice(IntRange(0, itemToBeDeleted - 1))
+            val emailsAfterDeleted = Cache.getEmails().slice(IntRange(itemToBeDeleted + 1, Cache.getEmails().size - 1))
+            newEmails = emailsBeforeDeleted + emailsAfterDeleted
+        }
+
+        Cache.setEmails(newEmails)
+        addContactView.updateEmailAddressesList(newEmails)
+    }
 }

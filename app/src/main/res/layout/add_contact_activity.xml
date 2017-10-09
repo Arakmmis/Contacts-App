@@ -178,6 +178,18 @@
                     android:layout_marginBottom="16dp"
                     android:layout_toEndOf="@id/iv_email_address"/>
 
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:layout_below="@id/rv_email_addresses"
+                    android:layout_marginBottom="16dp"
+                    android:layout_toEndOf="@id/iv_email_address"
+                    android:onClick="addEmailAddress"
+                    android:paddingBottom="4dp"
+                    android:paddingTop="4dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/add_new"/>
+
             </RelativeLayout>
 
             <View

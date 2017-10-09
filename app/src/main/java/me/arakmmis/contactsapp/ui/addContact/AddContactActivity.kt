@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import kotlinx.android.synthetic.main.add_contact_activity.*
 import kotlinx.android.synthetic.main.add_contact_dialog_address.view.*
+import kotlinx.android.synthetic.main.add_contact_dialog_email_address.view.*
 import kotlinx.android.synthetic.main.add_contact_dialog_phone_number.view.*
 import kotlinx.android.synthetic.main.dialog_upload_pic.view.*
 import me.arakmmis.contactsapp.R
@@ -39,12 +40,16 @@ class AddContactActivity : AllowMeActivity(), AddContactContract.AddContactView,
 
     private lateinit var adapterPhoneNumbers: DetailsAdapter<PhoneNumber>
     private lateinit var adapterAddresses: DetailsAdapter<Address>
+    private lateinit var adapterEmailAddress: DetailsAdapter<EmailAddress>
 
     private lateinit var dialogViewPhoneNumber: View
     private lateinit var alertDialogPhoneNumber: AlertDialog
 
     private lateinit var dialogViewAddress: View
     private lateinit var alertDialogAddress: AlertDialog
+
+    private lateinit var dialogViewEmailAddress: View
+    private lateinit var alertDialogEmailAddress: AlertDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,6 +80,15 @@ class AddContactActivity : AllowMeActivity(), AddContactContract.AddContactView,
         rv_phone_numbers.adapter = adapterPhoneNumbers
 
         rv_email_addresses.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        adapterEmailAddress = DetailsAdapter<EmailAddress>(
+                R.layout.add_contact_rv_item_email_address,
+                Cache.getEmails(),
+                object : Callback<EmailAddress> {
+                    override fun onClick(item: EmailAddress) {
+                        presenter.deleteEmailAddress(item)
+                    }
+                })
+        rv_email_addresses.adapter = adapterEmailAddress
 
         rv_addresses.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         adapterAddresses = DetailsAdapter<Address>(
@@ -279,12 +293,38 @@ class AddContactActivity : AllowMeActivity(), AddContactContract.AddContactView,
         }
     }
 
+    fun addEmailAddress(v: View) {
+        dialogViewEmailAddress = layoutInflater.inflate(R.layout.add_contact_dialog_email_address, null)
+        alertDialogEmailAddress = AlertDialog.Builder(this).setView(dialogViewEmailAddress).create()
+
+        val adapterEmailAddress = ArrayAdapter.createFromResource(dialogViewEmailAddress.context,
+                R.array.email_address_array, android.R.layout.simple_spinner_item)
+
+        adapterEmailAddress.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        dialogViewEmailAddress.spinner_email_address_type?.adapter = adapterEmailAddress
+
+        dialogViewEmailAddress.ok_ea.setOnClickListener { _ ->
+            presenter.addEmailAddress(EmailAddress(emailAddress = dialogViewEmailAddress.et_email_address.text.toString().trim(),
+                    type = dialogViewEmailAddress.spinner_email_address_type.selectedItem.toString()))
+        }
+
+        dialogViewEmailAddress.cancel_ea.setOnClickListener { _ ->
+            alertDialogEmailAddress.dismiss()
+        }
+
+        alertDialogEmailAddress.show()
+    }
+
     override fun showEmailAddressError(errorMessage: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        dialogViewEmailAddress.til_email_address.error = errorMessage
     }
 
     override fun updateEmailAddressesList(emails: List<EmailAddress>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        adapterEmailAddress.setData(emails)
+
+        if (alertDialogEmailAddress.isShowing) {
+            alertDialogEmailAddress.dismiss()
+        }
     }
 
     fun addContact(v: View) {

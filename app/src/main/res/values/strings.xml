@@ -22,6 +22,9 @@
     <string name="phone_number">Phone Number</string>
     <string name="add_phone_number">Add Phone Number</string>
     <string name="address">Address</string>
+    <string name="add_address">Add Address</string>
+    <string name="add_email_address">Add Email Address</string>
+    <string name="email_address">Email Address</string>
     <string-array name="phone_number_types_array">
         <item>Default</item>
         <item>Mobile</item>
@@ -38,6 +41,12 @@
     <string-array name="address_types_array">
         <item>Home</item>
         <item>Work</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="email_address_array">
+        <item>Personal</item>
+        <item>Work</item>
+        <item>School</item>
         <item>Other</item>
     </string-array>
 </resources>

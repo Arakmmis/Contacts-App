@@ -7,4 +7,5 @@ object Const {
     val PHONE_NUMBERS_KEY = "phone_numbers"
     val DEFAULT_TYPE_KEY = "default"
     val ADDRESSES_KEY = "addresses"
+    val EMAIL_ADDRESSES_KEY = "email_addresses"
 }
