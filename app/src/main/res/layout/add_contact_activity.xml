@@ -34,7 +34,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:focusableInTouchMode="true">
 
             <ImageView
                 android:id="@+id/iv_profile_pic_background"
@@ -66,8 +67,9 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
                 android:hint="@string/contact_name"
+                android:inputType="textCapWords"
                 android:textColor="@color/colorPrimaryDark"
-                android:textSize="24sp"/>
+                android:textSize="20sp"/>
 
             <RelativeLayout
                 android:id="@+id/rl_birth_date"
@@ -113,8 +115,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/divider_horizontal_0"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp">
+                android:layout_marginStart="16dp">
 
                 <ImageView
                     android:id="@+id/iv_call"
@@ -129,15 +130,21 @@
                     android:id="@+id/rv_phone_numbers"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="16dp"
                     android:layout_toEndOf="@id/iv_call"/>
 
-                <!--<ImageView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="40dp"-->
-                <!--android:layout_below="@id/rv_phone_numbers"-->
-                <!--android:scaleType="fitCenter"-->
-                <!--android:src="@drawable/add_new"/>-->
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:layout_below="@id/rv_phone_numbers"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="16dp"
+                    android:layout_toEndOf="@id/iv_call"
+                    android:onClick="addPhoneNumber"
+                    android:paddingBottom="4dp"
+                    android:paddingTop="4dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/add_new"/>
 
             </RelativeLayout>
 

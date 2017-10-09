@@ -4,16 +4,23 @@ import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
+import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
+import android.widget.ArrayAdapter
 import com.aitorvs.android.allowme.AllowMe
 import com.aitorvs.android.allowme.AllowMeActivity
 import com.bumptech.glide.Glide
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import kotlinx.android.synthetic.main.add_contact_activity.*
+import kotlinx.android.synthetic.main.add_contact_dialog_phone_number.view.*
 import kotlinx.android.synthetic.main.dialog_upload_pic.view.*
 import me.arakmmis.contactsapp.R
+import me.arakmmis.contactsapp.businesslogic.models.PhoneNumber
 import me.arakmmis.contactsapp.mvpcontracts.AddContactContract
+import me.arakmmis.contactsapp.ui.addContact.adapter.DetailsAdapter
+import me.arakmmis.contactsapp.utils.Cache
+import me.arakmmis.contactsapp.utils.Callback
 import pl.aprilapps.easyphotopicker.DefaultCallback
 import pl.aprilapps.easyphotopicker.EasyImage
 import java.io.File
@@ -27,6 +34,11 @@ class AddContactActivity : AllowMeActivity(), AddContactContract.AddContactView,
     private lateinit var presenter: AddContactContract.AddContactPresenter
     private var profilePicFile: File? = null
 
+    private lateinit var adapterPhoneNumbers: DetailsAdapter<PhoneNumber>
+
+    private lateinit var dialogViewPhoneNumber: View
+    private lateinit var alertDialogPhoneNumber: AlertDialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.add_contact_activity)
@@ -34,7 +46,28 @@ class AddContactActivity : AllowMeActivity(), AddContactContract.AddContactView,
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
+        Cache.removePhoneNumbers()
+        Cache.setDefaultTypeUsed(false)
+
         presenter = AddContactPresenter(this)
+
+        initUI()
+    }
+
+    private fun initUI() {
+        rv_phone_numbers.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        adapterPhoneNumbers = DetailsAdapter<PhoneNumber>(
+                R.layout.add_contact_rv_item_phone_number,
+                Cache.getPhoneNumbers(),
+                object : Callback<PhoneNumber> {
+                    override fun onClick(item: PhoneNumber) {
+                        presenter.deletePhoneNumber(item)
+                    }
+                })
+        rv_phone_numbers.adapter = adapterPhoneNumbers
+
+        rv_email_addresses.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        rv_addresses.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
     }
 
     fun openDatePickerDialog(v: View) {
@@ -151,6 +184,47 @@ class AddContactActivity : AllowMeActivity(), AddContactContract.AddContactView,
                 }
             }
         })
+    }
+
+    fun addPhoneNumber(v: View) {
+        dialogViewPhoneNumber = layoutInflater.inflate(R.layout.add_contact_dialog_phone_number, null)
+        alertDialogPhoneNumber = AlertDialog.Builder(this).setView(dialogViewPhoneNumber).create()
+
+        val adapterPhoneNumbers: ArrayAdapter<CharSequence>
+
+        if (Cache.isDefaultTypeUsed()) {
+            adapterPhoneNumbers = ArrayAdapter.createFromResource(dialogViewPhoneNumber.context,
+                    R.array.phone_number_types_without_default_array, android.R.layout.simple_spinner_item)
+        } else {
+            adapterPhoneNumbers = ArrayAdapter.createFromResource(dialogViewPhoneNumber.context,
+                    R.array.phone_number_types_array, android.R.layout.simple_spinner_item)
+        }
+
+        adapterPhoneNumbers.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        dialogViewPhoneNumber.spinner_phone_number_type?.adapter = adapterPhoneNumbers
+
+        dialogViewPhoneNumber.ok.setOnClickListener { _ ->
+            presenter.addPhoneNumber(PhoneNumber(number = dialogViewPhoneNumber.et_phone_number.text.toString().trim(),
+                    type = dialogViewPhoneNumber.spinner_phone_number_type.selectedItem.toString()))
+        }
+
+        dialogViewPhoneNumber.cancel.setOnClickListener { _ ->
+            alertDialogPhoneNumber.dismiss()
+        }
+
+        alertDialogPhoneNumber.show()
+    }
+
+    override fun showPhoneNumberError(errorMessage: String) {
+        dialogViewPhoneNumber.til_phone_number.error = errorMessage
+    }
+
+    override fun updatePhoneList(phoneNumbers: List<PhoneNumber>) {
+        adapterPhoneNumbers.setData(phoneNumbers)
+
+        if (alertDialogPhoneNumber.isShowing) {
+            alertDialogPhoneNumber.dismiss()
+        }
     }
 
     fun addContact(v: View) {
