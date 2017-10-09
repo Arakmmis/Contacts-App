@@ -13,9 +13,12 @@ import com.aitorvs.android.allowme.AllowMeActivity
 import com.bumptech.glide.Glide
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import kotlinx.android.synthetic.main.add_contact_activity.*
+import kotlinx.android.synthetic.main.add_contact_dialog_address.view.*
 import kotlinx.android.synthetic.main.add_contact_dialog_phone_number.view.*
 import kotlinx.android.synthetic.main.dialog_upload_pic.view.*
 import me.arakmmis.contactsapp.R
+import me.arakmmis.contactsapp.businesslogic.models.Address
+import me.arakmmis.contactsapp.businesslogic.models.EmailAddress
 import me.arakmmis.contactsapp.businesslogic.models.PhoneNumber
 import me.arakmmis.contactsapp.mvpcontracts.AddContactContract
 import me.arakmmis.contactsapp.ui.addContact.adapter.DetailsAdapter
@@ -35,9 +38,13 @@ class AddContactActivity : AllowMeActivity(), AddContactContract.AddContactView,
     private var profilePicFile: File? = null
 
     private lateinit var adapterPhoneNumbers: DetailsAdapter<PhoneNumber>
+    private lateinit var adapterAddresses: DetailsAdapter<Address>
 
     private lateinit var dialogViewPhoneNumber: View
     private lateinit var alertDialogPhoneNumber: AlertDialog
+
+    private lateinit var dialogViewAddress: View
+    private lateinit var alertDialogAddress: AlertDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +55,7 @@ class AddContactActivity : AllowMeActivity(), AddContactContract.AddContactView,
 
         Cache.removePhoneNumbers()
         Cache.setDefaultTypeUsed(false)
+        Cache.removeAddress()
 
         presenter = AddContactPresenter(this)
 
@@ -67,7 +75,17 @@ class AddContactActivity : AllowMeActivity(), AddContactContract.AddContactView,
         rv_phone_numbers.adapter = adapterPhoneNumbers
 
         rv_email_addresses.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+
         rv_addresses.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        adapterAddresses = DetailsAdapter<Address>(
+                R.layout.add_contact_rv_item_address,
+                Cache.getAddresses(),
+                object : Callback<Address> {
+                    override fun onClick(item: Address) {
+                        presenter.deleteAddress(item)
+                    }
+                })
+        rv_addresses.adapter = adapterAddresses
     }
 
     fun openDatePickerDialog(v: View) {
@@ -203,12 +221,12 @@ class AddContactActivity : AllowMeActivity(), AddContactContract.AddContactView,
         adapterPhoneNumbers.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         dialogViewPhoneNumber.spinner_phone_number_type?.adapter = adapterPhoneNumbers
 
-        dialogViewPhoneNumber.ok.setOnClickListener { _ ->
+        dialogViewPhoneNumber.ok_pn.setOnClickListener { _ ->
             presenter.addPhoneNumber(PhoneNumber(number = dialogViewPhoneNumber.et_phone_number.text.toString().trim(),
                     type = dialogViewPhoneNumber.spinner_phone_number_type.selectedItem.toString()))
         }
 
-        dialogViewPhoneNumber.cancel.setOnClickListener { _ ->
+        dialogViewPhoneNumber.cancel_pn.setOnClickListener { _ ->
             alertDialogPhoneNumber.dismiss()
         }
 
@@ -225,6 +243,48 @@ class AddContactActivity : AllowMeActivity(), AddContactContract.AddContactView,
         if (alertDialogPhoneNumber.isShowing) {
             alertDialogPhoneNumber.dismiss()
         }
+    }
+
+    fun addAddress(v: View) {
+        dialogViewAddress = layoutInflater.inflate(R.layout.add_contact_dialog_address, null)
+        alertDialogAddress = AlertDialog.Builder(this).setView(dialogViewAddress).create()
+
+        val adapterAddress = ArrayAdapter.createFromResource(dialogViewAddress.context,
+                R.array.address_types_array, android.R.layout.simple_spinner_item)
+
+        adapterAddress.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        dialogViewAddress.spinner_address_type?.adapter = adapterAddress
+
+        dialogViewAddress.ok_a.setOnClickListener { _ ->
+            presenter.addAddress(Address(address = dialogViewAddress.et_address.text.toString().trim(),
+                    type = dialogViewAddress.spinner_address_type.selectedItem.toString()))
+        }
+
+        dialogViewAddress.cancel_a.setOnClickListener { _ ->
+            alertDialogAddress.dismiss()
+        }
+
+        alertDialogAddress.show()
+    }
+
+    override fun showAddressError(errorMessage: String) {
+        dialogViewAddress.til_address.error = errorMessage
+    }
+
+    override fun updateAddressList(addresses: List<Address>) {
+        adapterAddresses.setData(addresses)
+
+        if (alertDialogAddress.isShowing) {
+            alertDialogAddress.dismiss()
+        }
+    }
+
+    override fun showEmailAddressError(errorMessage: String) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun updateEmailAddressesList(emails: List<EmailAddress>) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     fun addContact(v: View) {

@@ -137,7 +137,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="35dp"
                     android:layout_below="@id/rv_phone_numbers"
-                    android:layout_centerHorizontal="true"
                     android:layout_marginBottom="16dp"
                     android:layout_toEndOf="@id/iv_call"
                     android:onClick="addPhoneNumber"
@@ -161,8 +160,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/divider_horizontal_1"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp">
+                android:layout_marginStart="16dp">
 
                 <ImageView
                     android:id="@+id/iv_email_address"
@@ -177,8 +175,9 @@
                     android:id="@+id/rv_email_addresses"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="16dp"
                     android:layout_toEndOf="@id/iv_email_address"/>
+
             </RelativeLayout>
 
             <View
@@ -194,8 +193,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/divider_horizontal_2"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp">
+                android:layout_marginStart="16dp">
 
                 <ImageView
                     android:id="@+id/iv_address"
@@ -210,8 +208,20 @@
                     android:id="@+id/rv_addresses"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="16dp"
                     android:layout_toEndOf="@id/iv_address"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:layout_below="@id/rv_addresses"
+                    android:layout_marginBottom="16dp"
+                    android:layout_toEndOf="@id/iv_address"
+                    android:onClick="addAddress"
+                    android:paddingBottom="4dp"
+                    android:paddingTop="4dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/add_new"/>
             </RelativeLayout>
         </RelativeLayout>
     </ScrollView>

@@ -6,7 +6,7 @@
                 android:layout_marginTop="8dp">
 
     <ImageView
-        android:id="@+id/iv_delete_pn"
+        android:id="@+id/iv_delete_a"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -23,11 +23,11 @@
         android:layout_width="2dp"
         android:layout_height="30dp"
         android:layout_centerVertical="true"
-        android:layout_toStartOf="@id/iv_delete_pn"
+        android:layout_toStartOf="@id/iv_delete_a"
         android:background="@color/super_light_grey"/>
 
     <LinearLayout
-        android:id="@+id/ll_phone_number_details"
+        android:id="@+id/ll_address_details"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -38,7 +38,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv_phone_number"
+            android:id="@+id/tv_address"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginBottom="2dp"
@@ -48,7 +48,7 @@
             android:textSize="16sp"/>
 
         <TextView
-            android:id="@+id/tv_phone_number_type"
+            android:id="@+id/tv_address_type"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginTop="2dp"
