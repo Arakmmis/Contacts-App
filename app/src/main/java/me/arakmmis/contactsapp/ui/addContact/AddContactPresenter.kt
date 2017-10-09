@@ -1,13 +1,18 @@
 package me.arakmmis.contactsapp.ui.addContact
 
+import me.arakmmis.contactsapp.businesslogic.contacts.ContactsManager
+import me.arakmmis.contactsapp.businesslogic.contacts.ContactsRepo
 import me.arakmmis.contactsapp.businesslogic.models.Address
 import me.arakmmis.contactsapp.businesslogic.models.EmailAddress
 import me.arakmmis.contactsapp.businesslogic.models.PhoneNumber
 import me.arakmmis.contactsapp.mvpcontracts.AddContactContract
 import me.arakmmis.contactsapp.utils.Cache
 import me.arakmmis.contactsapp.utils.ValidationUtil
+import java.io.File
 
 class AddContactPresenter(private val addContactView: AddContactContract.AddContactView) : AddContactContract.AddContactPresenter {
+
+    val contactsManager: ContactsManager = ContactsRepo()
 
     override fun addPhoneNumber(phoneNumber: PhoneNumber) {
         val result = ValidationUtil.errorsInPhoneNumber(phoneNumber.number)
@@ -123,5 +128,9 @@ class AddContactPresenter(private val addContactView: AddContactContract.AddCont
 
         Cache.setEmails(newEmails)
         addContactView.updateEmailAddressesList(newEmails)
+    }
+
+    override fun addContact(profilePicFile: File?, contactName: String, contactBirthDate: String) {
+
     }
 }

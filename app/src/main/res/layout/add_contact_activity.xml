@@ -58,7 +58,7 @@
                 app:riv_corner_radius="100dp"/>
 
             <EditText
-                android:id="@+id/tv_contact_name"
+                android:id="@+id/et_contact_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/iv_contact_pic"
@@ -75,7 +75,7 @@
                 android:id="@+id/rl_birth_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tv_contact_name"
+                android:layout_below="@id/et_contact_name"
                 android:layout_marginBottom="8dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp">

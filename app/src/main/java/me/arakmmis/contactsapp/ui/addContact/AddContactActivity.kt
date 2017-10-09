@@ -69,6 +69,7 @@ class AddContactActivity : AllowMeActivity(), AddContactContract.AddContactView,
 
     private fun initUI() {
         rv_phone_numbers.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        rv_phone_numbers.isNestedScrollingEnabled = false
         adapterPhoneNumbers = DetailsAdapter<PhoneNumber>(
                 R.layout.add_contact_rv_item_phone_number,
                 Cache.getPhoneNumbers(),
@@ -80,6 +81,7 @@ class AddContactActivity : AllowMeActivity(), AddContactContract.AddContactView,
         rv_phone_numbers.adapter = adapterPhoneNumbers
 
         rv_email_addresses.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        rv_email_addresses.isNestedScrollingEnabled = false
         adapterEmailAddress = DetailsAdapter<EmailAddress>(
                 R.layout.add_contact_rv_item_email_address,
                 Cache.getEmails(),
@@ -91,6 +93,7 @@ class AddContactActivity : AllowMeActivity(), AddContactContract.AddContactView,
         rv_email_addresses.adapter = adapterEmailAddress
 
         rv_addresses.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        rv_addresses.isNestedScrollingEnabled = false
         adapterAddresses = DetailsAdapter<Address>(
                 R.layout.add_contact_rv_item_address,
                 Cache.getAddresses(),
@@ -328,6 +331,8 @@ class AddContactActivity : AllowMeActivity(), AddContactContract.AddContactView,
     }
 
     fun addContact(v: View) {
-
+        presenter.addContact(profilePicFile!!,
+                et_contact_name.text.toString().trim(),
+                tv_birth_date.text.toString().trim())
     }
 }

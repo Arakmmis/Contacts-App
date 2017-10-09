@@ -1,9 +1,11 @@
 package me.arakmmis.contactsapp.businesslogic.models
 
+import android.arch.persistence.room.ColumnInfo
 import java.io.Serializable
 
-/**
- * Created by arakm on 10/5/2017.
- */
-data class Address(val address: String,
-                   val type: String) : Serializable
+data class Address(
+        @ColumnInfo(name = "address")
+        val address: String,
+
+        @ColumnInfo(name = "address_type")
+        val type: String) : Serializable
