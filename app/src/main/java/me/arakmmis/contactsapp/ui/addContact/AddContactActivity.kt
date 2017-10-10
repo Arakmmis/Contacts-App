@@ -1,6 +1,7 @@
 package me.arakmmis.contactsapp.ui.addContact
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
@@ -33,9 +34,6 @@ import pl.aprilapps.easyphotopicker.EasyImage
 import java.io.File
 import java.util.*
 
-/**
- * Created by arakm on 10/5/2017.
- */
 class AddContactActivity : AllowMeActivity(), AddContactContract.AddContactView, DatePickerDialog.OnDateSetListener {
 
     private lateinit var presenter: AddContactContract.AddContactPresenter
@@ -53,6 +51,12 @@ class AddContactActivity : AllowMeActivity(), AddContactContract.AddContactView,
 
     private lateinit var dialogViewEmailAddress: View
     private lateinit var alertDialogEmailAddress: AlertDialog
+
+    companion object {
+        fun start(context: Context) {
+            context.startActivity(Intent(context, AddContactActivity::class.java))
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -342,7 +346,7 @@ class AddContactActivity : AllowMeActivity(), AddContactContract.AddContactView,
 
     override fun navigateToContactDetails(contact: Contact) {
         val intent = Intent(this@AddContactActivity, ContactDetailsActivity::class.java)
-        intent.putExtra(Const.CONTACT_KEY, contact)
+        intent.putExtra(Const.CONTACT_ID_KEY, contact)
         startActivity(intent)
     }
 }

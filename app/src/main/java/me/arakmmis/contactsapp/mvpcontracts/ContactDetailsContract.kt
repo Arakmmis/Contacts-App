@@ -1,12 +1,11 @@
 package me.arakmmis.contactsapp.mvpcontracts
 
-/**
- * Created by arakm on 10/5/2017.
- */
+import me.arakmmis.contactsapp.businesslogic.models.Contact
+
 interface ContactDetailsContract {
 
     interface ContactDetailsView {
-
+        fun setContactData(contact: Contact)
     }
 
     interface ContactDetailsPresenter {

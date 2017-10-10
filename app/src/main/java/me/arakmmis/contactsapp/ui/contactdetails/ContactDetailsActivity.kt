@@ -1,5 +1,7 @@
 package me.arakmmis.contactsapp.ui.contactdetails
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -17,15 +19,21 @@ import me.arakmmis.contactsapp.mvpcontracts.ContactDetailsContract
 import me.arakmmis.contactsapp.ui.contactdetails.adapter.DetailsAdapter
 import me.arakmmis.contactsapp.utils.Const
 
-/**
- * Created by arakm on 10/5/2017.
- */
 class ContactDetailsActivity : AppCompatActivity(), ContactDetailsContract.ContactDetailsView {
 
     lateinit var presenter: ContactDetailsContract.ContactDetailsPresenter
 
-    val contact by lazy {
-        intent.extras.getSerializable(Const.CONTACT_KEY) as Contact
+    val contactId by lazy {
+        intent.extras.getInt(Const.CONTACT_ID_KEY)
+    }
+
+    companion object {
+        fun start(context: Context, contactId: Int) {
+            val intent = Intent(context, ContactDetailsActivity::class.java)
+            intent.putExtra(Const.CONTACT_ID_KEY, contactId)
+
+            context.startActivity(intent)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,17 +49,19 @@ class ContactDetailsActivity : AppCompatActivity(), ContactDetailsContract.Conta
     }
 
     private fun initUI() {
-        tv_contact_name.text = contact.name
-
-        tv_birth_date.text = contact.dateOfBirth
-
         rv_phone_numbers.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         rv_phone_numbers.isNestedScrollingEnabled = false
-        rv_phone_numbers.adapter = DetailsAdapter<PhoneNumber>(R.layout.contact_details_rv_item_phone_number,
-                contact.phoneNumbers)
 
         rv_email_addresses.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         rv_email_addresses.isNestedScrollingEnabled = false
+    }
+
+    override fun setContactData(contact: Contact) {
+        tv_contact_name.text = contact.name
+        tv_birth_date.text = contact.dateOfBirth
+
+        rv_phone_numbers.adapter = DetailsAdapter<PhoneNumber>(R.layout.contact_details_rv_item_phone_number,
+                contact.phoneNumbers)
         rv_email_addresses.adapter = DetailsAdapter<EmailAddress>(R.layout.contact_details_rv_item_email_address,
                 contact.emailAddresses)
 

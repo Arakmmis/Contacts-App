@@ -1,5 +1,6 @@
 package me.arakmmis.contactsapp.ui.home
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -13,7 +14,6 @@ import me.arakmmis.contactsapp.ui.addContact.AddContactActivity
 import me.arakmmis.contactsapp.ui.contactdetails.ContactDetailsActivity
 import me.arakmmis.contactsapp.ui.home.adapter.ContactsAdapter
 import me.arakmmis.contactsapp.utils.Callback
-import me.arakmmis.contactsapp.utils.Const
 
 /**
  * Created by arakm on 10/4/2017.
@@ -23,6 +23,12 @@ class HomeActivity : AppCompatActivity(), HomeContract.HomeView, Callback<Contac
     lateinit var presenter: HomeContract.HomePresenter
 
     var adapterContacts: ContactsAdapter? = null
+
+    companion object {
+        fun start(context: Context) {
+            context.startActivity(Intent(context, HomeActivity::class.java))
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,12 +49,10 @@ class HomeActivity : AppCompatActivity(), HomeContract.HomeView, Callback<Contac
     }
 
     override fun onClick(item: Contact) {
-        val intent = Intent(this@HomeActivity, ContactDetailsActivity::class.java)
-        intent.putExtra(Const.CONTACT_KEY, item)
-        startActivity(intent)
+        ContactDetailsActivity.start(this@HomeActivity, item.id)
     }
 
     fun addContact(v: View) {
-        startActivity(Intent(this@HomeActivity, AddContactActivity::class.java))
+        AddContactActivity.start(this@HomeActivity)
     }
 }
