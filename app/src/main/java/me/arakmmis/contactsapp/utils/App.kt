@@ -1,24 +1,26 @@
 package me.arakmmis.contactsapp.utils
 
 import android.app.Application
-import android.arch.persistence.room.Room
+
 import com.orhanobut.hawk.Hawk
+import io.realm.Realm
 
-
-object App : Application() {
-
-    fun getDatabase(): AppDatabase = db
-
-    val db: AppDatabase by lazy {
-        Room.databaseBuilder(this, AppDatabase::class.java, "my_contacts").build()
+class App : Application() {
+    init {
+        instance = this
     }
 
     override fun onCreate() {
         super.onCreate()
-
         Hawk.init(this).build()
-        Cache.removePhoneNumbers()
-        Cache.removeAddress()
-        Cache.removeEmails()
+        Realm.init(this);
+
+        realm = Realm.getDefaultInstance()
+    }
+
+    companion object {
+        var instance: App? = null
+
+        var realm: Realm? = null
     }
 }

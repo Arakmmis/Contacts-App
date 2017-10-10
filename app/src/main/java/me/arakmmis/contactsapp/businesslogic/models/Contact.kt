@@ -1,34 +1,59 @@
 package me.arakmmis.contactsapp.businesslogic.models
 
-import android.arch.persistence.room.ColumnInfo
-import android.arch.persistence.room.Embedded
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
+import io.realm.RealmList
+import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
 import java.io.Serializable
 import java.util.*
+import java.util.concurrent.ThreadLocalRandom
 
-@Entity(tableName = "Contact")
-data class Contact(
-        @PrimaryKey(autoGenerate = true)
-        val id: String,
+open class Contact(
+        @PrimaryKey
+        var id: Int = ThreadLocalRandom.current().nextInt(0, 100000 + 1),
 
-        @ColumnInfo(name = "profile_pic")
-        val profilePic: String,
+        var profilePic: ByteArray,
 
-        @ColumnInfo(name = "name")
-        val name: String,
+        var name: String,
 
-        @ColumnInfo(name = "date_of_birth")
-        val dateOfBirth: String,
+        var dateOfBirth: String,
 
-        @Embedded
-        val phoneNumbers: List<PhoneNumber>,
+        var phoneNumbers: RealmList<PhoneNumber>,
 
-        @ColumnInfo(name = "default_phone_number")
-        val defaultPhoneNumber: String,
+        var defaultPhoneNumber: String,
 
-        @Embedded
-        val addresses: List<Address> = Arrays.asList(),
+        var addresses: RealmList<Address> = RealmList(),
 
-        @Embedded
-        val emailAddresses: List<EmailAddress>) : Serializable
+        var emailAddresses: RealmList<EmailAddress>) : Serializable, RealmObject() {
+
+    constructor() : this(0, ByteArray(0), "", "", RealmList<PhoneNumber>(), "", RealmList<Address>(), RealmList<EmailAddress>())
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Contact
+
+        if (id != other.id) return false
+        if (!Arrays.equals(profilePic, other.profilePic)) return false
+        if (name != other.name) return false
+        if (dateOfBirth != other.dateOfBirth) return false
+        if (phoneNumbers != other.phoneNumbers) return false
+        if (defaultPhoneNumber != other.defaultPhoneNumber) return false
+        if (addresses != other.addresses) return false
+        if (emailAddresses != other.emailAddresses) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id
+        result = 31 * result + Arrays.hashCode(profilePic)
+        result = 31 * result + name.hashCode()
+        result = 31 * result + dateOfBirth.hashCode()
+        result = 31 * result + phoneNumbers.hashCode()
+        result = 31 * result + defaultPhoneNumber.hashCode()
+        result = 31 * result + addresses.hashCode()
+        result = 31 * result + emailAddresses.hashCode()
+        return result
+    }
+}

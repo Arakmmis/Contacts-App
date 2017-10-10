@@ -1,6 +1,7 @@
 package me.arakmmis.contactsapp.mvpcontracts
 
 import me.arakmmis.contactsapp.businesslogic.models.Address
+import me.arakmmis.contactsapp.businesslogic.models.Contact
 import me.arakmmis.contactsapp.businesslogic.models.EmailAddress
 import me.arakmmis.contactsapp.businesslogic.models.PhoneNumber
 import java.io.File
@@ -22,6 +23,8 @@ interface AddContactContract {
         fun showEmailAddressError(errorMessage: String)
 
         fun updateEmailAddressesList(emails: List<EmailAddress>)
+
+        fun navigateToContactDetails(contact: Contact)
     }
 
     interface AddContactPresenter {

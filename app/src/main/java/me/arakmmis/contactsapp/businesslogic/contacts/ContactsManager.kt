@@ -7,5 +7,5 @@ interface ContactsManager {
 
     fun getContacts(): Single<List<Contact>>
 
-    fun insertContact(contact: Contact)
+    fun insertContact(contact: Contact): Single<Contact>
 }

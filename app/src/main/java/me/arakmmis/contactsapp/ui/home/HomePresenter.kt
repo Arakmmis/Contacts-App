@@ -5,14 +5,11 @@ import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import me.arakmmis.contactsapp.businesslogic.models.Contact
 import me.arakmmis.contactsapp.businesslogic.contacts.ContactsManager
 import me.arakmmis.contactsapp.businesslogic.contacts.TestContactsRepo
+import me.arakmmis.contactsapp.businesslogic.models.Contact
 import me.arakmmis.contactsapp.mvpcontracts.HomeContract
 
-/**
- * Created by arakm on 10/4/2017.
- */
 class HomePresenter(val homeView: HomeContract.HomeView) : HomeContract.HomePresenter {
 
     private val contactsManager: ContactsManager = TestContactsRepo()

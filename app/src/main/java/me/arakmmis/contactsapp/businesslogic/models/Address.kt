@@ -1,11 +1,11 @@
 package me.arakmmis.contactsapp.businesslogic.models
 
-import android.arch.persistence.room.ColumnInfo
+import io.realm.RealmObject
 import java.io.Serializable
 
-data class Address(
-        @ColumnInfo(name = "address")
-        val address: String,
+open class Address(
+        var address: String,
+        var type: String) : Serializable, RealmObject() {
 
-        @ColumnInfo(name = "address_type")
-        val type: String) : Serializable
+    constructor() : this("", "")
+}

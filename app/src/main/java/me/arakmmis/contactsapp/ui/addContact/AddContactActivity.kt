@@ -19,12 +19,15 @@ import kotlinx.android.synthetic.main.add_contact_dialog_phone_number.view.*
 import kotlinx.android.synthetic.main.dialog_upload_pic.view.*
 import me.arakmmis.contactsapp.R
 import me.arakmmis.contactsapp.businesslogic.models.Address
+import me.arakmmis.contactsapp.businesslogic.models.Contact
 import me.arakmmis.contactsapp.businesslogic.models.EmailAddress
 import me.arakmmis.contactsapp.businesslogic.models.PhoneNumber
 import me.arakmmis.contactsapp.mvpcontracts.AddContactContract
 import me.arakmmis.contactsapp.ui.addContact.adapter.DetailsAdapter
+import me.arakmmis.contactsapp.ui.contactdetails.ContactDetailsActivity
 import me.arakmmis.contactsapp.utils.Cache
 import me.arakmmis.contactsapp.utils.Callback
+import me.arakmmis.contactsapp.utils.Const
 import pl.aprilapps.easyphotopicker.DefaultCallback
 import pl.aprilapps.easyphotopicker.EasyImage
 import java.io.File
@@ -61,6 +64,7 @@ class AddContactActivity : AllowMeActivity(), AddContactContract.AddContactView,
         Cache.removePhoneNumbers()
         Cache.setDefaultTypeUsed(false)
         Cache.removeAddress()
+        Cache.removeEmails()
 
         presenter = AddContactPresenter(this)
 
@@ -334,5 +338,11 @@ class AddContactActivity : AllowMeActivity(), AddContactContract.AddContactView,
         presenter.addContact(profilePicFile!!,
                 et_contact_name.text.toString().trim(),
                 tv_birth_date.text.toString().trim())
+    }
+
+    override fun navigateToContactDetails(contact: Contact) {
+        val intent = Intent(this@AddContactActivity, ContactDetailsActivity::class.java)
+        intent.putExtra(Const.CONTACT_KEY, contact)
+        startActivity(intent)
     }
 }
