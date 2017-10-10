@@ -111,8 +111,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/divider_horizontal_0"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp">
+                android:layout_marginStart="16dp">
 
                 <ImageView
                     android:id="@+id/iv_call"
@@ -145,7 +144,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/divider_horizontal_1"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp">
+                android:layout_marginTop="4dp">
 
                 <ImageView
                     android:id="@+id/iv_email_address"
@@ -178,7 +177,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/divider_horizontal_2"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp">
+                android:layout_marginTop="4dp">
 
                 <ImageView
                     android:id="@+id/iv_address"
