@@ -8,4 +8,6 @@ interface ContactsManager {
     fun getContacts(): Single<List<Contact>>
 
     fun insertContact(contact: Contact): Single<Contact>
+
+    fun getContact(contactId: Int): Single<Contact>
 }

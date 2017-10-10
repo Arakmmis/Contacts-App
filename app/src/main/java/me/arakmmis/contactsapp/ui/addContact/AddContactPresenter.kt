@@ -141,7 +141,7 @@ class AddContactPresenter(private val addContactView: AddContactContract.AddCont
         Log.d("ACP: addContact", "Default Number: " + Cache.getPhoneNumbers().filter { phoneNumber -> phoneNumber.type == "Default" }[0].number)
 
         val contact = Contact(name = contactName,
-                profilePic = ByteArrayUtil.fromFile(profilePicFile!!) ?:
+                profilePic = ByteArrayUtil.fromFile(profilePicFile) ?:
                         ByteArrayUtil.fromBitmap(BitmapFactory.decodeResource(App.instance?.resources, R.drawable.placeholder_add_profile_pic)),
                 dateOfBirth = contactBirthDate,
                 phoneNumbers = ListUtil<PhoneNumber>().listToRealmList(Cache.getPhoneNumbers()),

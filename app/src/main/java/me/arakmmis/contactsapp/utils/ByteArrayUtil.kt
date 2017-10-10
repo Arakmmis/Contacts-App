@@ -7,8 +7,8 @@ import java.io.FileInputStream
 
 object ByteArrayUtil {
 
-    fun fromFile(file: File): ByteArray {
-        val bytesArray = ByteArray(file.length().toInt())
+    fun fromFile(file: File?): ByteArray? {
+        val bytesArray = ByteArray(file?.length()!!.toInt())
 
         val fis = FileInputStream(file)
         fis.read(bytesArray)

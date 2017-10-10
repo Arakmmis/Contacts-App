@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.contact_details_activity.*
 import me.arakmmis.contactsapp.R
 import me.arakmmis.contactsapp.businesslogic.models.Address
@@ -43,7 +44,7 @@ class ContactDetailsActivity : AppCompatActivity(), ContactDetailsContract.Conta
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        presenter = ContactDetailsPresenter(this)
+        presenter = ContactDetailsPresenter(this, contactId)
 
         initUI()
     }
@@ -57,6 +58,10 @@ class ContactDetailsActivity : AppCompatActivity(), ContactDetailsContract.Conta
     }
 
     override fun setContactData(contact: Contact) {
+        Glide.with(this@ContactDetailsActivity)
+                .load(contact.profilePic)
+                .into(iv_contact_pic)
+
         tv_contact_name.text = contact.name
         tv_birth_date.text = contact.dateOfBirth
 

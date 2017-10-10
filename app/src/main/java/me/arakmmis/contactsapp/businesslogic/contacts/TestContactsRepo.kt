@@ -99,4 +99,21 @@ class TestContactsRepo : ContactsManager {
             received.onSuccess(contact)
         }
     }
+
+    override fun getContact(contactId: Int): Single<Contact> {
+        return Single.create { received: SingleEmitter<Contact> ->
+            received.onSuccess(Contact(
+                    4,
+                    ByteArrayUtil.fromBitmap(BitmapFactory.decodeResource(App.instance?.resources, R.drawable.placeholder_add_profile_pic)), "Islam El Desoky",
+                    "1 Aug 1995",
+                    RealmList<PhoneNumber>(PhoneNumber("+98162874962", "Work"), PhoneNumber("0507791448", "Home")),
+                    "0507791448",
+                    RealmList<Address>(Address("6 Omar Bin El 5atab", "Home"), Address("2768 Peck Street", "Other"),
+                            Address("2090 Briarwood Drive", "Work")),
+                    RealmList<EmailAddress>(EmailAddress("tacoxubimu@p33.org", "Work"), EmailAddress("jukara@p33.org", "School"),
+                            EmailAddress("niwupeta@p33.org", "Personal"), EmailAddress("yave@p33.org", "Personal"),
+                            EmailAddress("kiluci@p33.org", "Other"))
+            ))
+        }
+    }
 }

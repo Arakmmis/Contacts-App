@@ -27,4 +27,14 @@ class ContactsRepo : ContactsManager {
 
         received.onSuccess(contact)
     }
+
+    override fun getContact(contactId: Int): Single<Contact> = Single.create { received: SingleEmitter<Contact> ->
+        App.realm?.executeTransaction { realm ->
+            val realmContact = realm.where(Contact::class.java)
+                    .equalTo("id", contactId)
+                    .findFirst()
+
+            received.onSuccess(realmContact)
+        }
+    }
 }
