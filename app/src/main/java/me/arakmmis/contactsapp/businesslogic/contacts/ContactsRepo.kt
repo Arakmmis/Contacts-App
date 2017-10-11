@@ -3,6 +3,7 @@ package me.arakmmis.contactsapp.businesslogic.contacts
 import io.reactivex.Single
 import io.reactivex.SingleEmitter
 import io.realm.Realm
+import io.realm.Sort
 import me.arakmmis.contactsapp.businesslogic.models.Contact
 import java.util.*
 
@@ -12,6 +13,7 @@ class ContactsRepo : ContactsManager {
         getRealmInstance().executeTransaction { realm ->
             val realmContacts = realm.where(Contact::class.java)
                     .findAll()
+                    .sort("name", Sort.ASCENDING)
 
             val copiedFromRealm = realm.copyFromRealm(realmContacts)
             val contacts: ArrayList<Contact> = ArrayList<Contact>()
