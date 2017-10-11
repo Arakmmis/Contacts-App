@@ -116,4 +116,10 @@ class TestContactsRepo : ContactsManager {
             ))
         }
     }
+
+    override fun deleteContact(contactId: Int): Single<String> {
+        return Single.create { received: SingleEmitter<String> ->
+            received.onSuccess("Contact Deleted Successfully")
+        }
+    }
 }

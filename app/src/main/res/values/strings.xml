@@ -11,6 +11,7 @@
         Contact Details
     -->
     <string name="delete_contact">Delete Contact</string>
+    <string name="success_message">Contact Deleted Successfully</string>
 
     <!--
         Add Contact

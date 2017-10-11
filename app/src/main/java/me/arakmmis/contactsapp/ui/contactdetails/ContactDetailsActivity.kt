@@ -3,6 +3,7 @@ package me.arakmmis.contactsapp.ui.contactdetails
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
@@ -11,6 +12,7 @@ import android.view.View
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.contact_details_activity.*
+import kotlinx.android.synthetic.main.contact_details_dialog_delete_contact.view.*
 import me.arakmmis.contactsapp.R
 import me.arakmmis.contactsapp.businesslogic.models.Address
 import me.arakmmis.contactsapp.businesslogic.models.Contact
@@ -18,6 +20,7 @@ import me.arakmmis.contactsapp.businesslogic.models.EmailAddress
 import me.arakmmis.contactsapp.businesslogic.models.PhoneNumber
 import me.arakmmis.contactsapp.mvpcontracts.ContactDetailsContract
 import me.arakmmis.contactsapp.ui.contactdetails.adapter.DetailsAdapter
+import me.arakmmis.contactsapp.ui.home.HomeActivity
 import me.arakmmis.contactsapp.utils.Const
 
 class ContactDetailsActivity : AppCompatActivity(), ContactDetailsContract.ContactDetailsView {
@@ -89,11 +92,34 @@ class ContactDetailsActivity : AppCompatActivity(), ContactDetailsContract.Conta
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.action_delete -> {
-                Toast.makeText(this@ContactDetailsActivity, "Good Luck with that!", Toast.LENGTH_SHORT).show()
+                openLastCheckDialog()
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun openLastCheckDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.contact_details_dialog_delete_contact, null)
+        val alertDialog = AlertDialog.Builder(this).setView(dialogView).create()
+
+        dialogView.ok.setOnClickListener { _ ->
+            presenter.deleteContact(contactId)
+        }
+
+        dialogView.cancel.setOnClickListener { _ ->
+            alertDialog.dismiss()
+        }
+
+        alertDialog.show()
+    }
+
+    override fun toast(message: String) {
+        Toast.makeText(this@ContactDetailsActivity, message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun navigateToHome() {
+        HomeActivity.start(this@ContactDetailsActivity)
     }
 
     fun editContact(v: View) {

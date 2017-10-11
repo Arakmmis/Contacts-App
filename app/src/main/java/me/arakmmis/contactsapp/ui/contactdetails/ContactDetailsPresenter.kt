@@ -35,4 +35,23 @@ class ContactDetailsPresenter(val contactDetailsView: ContactDetailsContract.Con
                     }
                 })
     }
+
+    override fun deleteContact(contactId: Int) {
+        contactsManager.deleteContact(contactId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : SingleObserver<String> {
+                    override fun onError(e: Throwable) {
+                        Log.e("CDP: deleteContact", e.message)
+                    }
+
+                    override fun onSubscribe(d: Disposable) {
+                    }
+
+                    override fun onSuccess(t: String) {
+                        contactDetailsView.toast(t)
+                        contactDetailsView.navigateToHome()
+                    }
+                })
+    }
 }

@@ -4,7 +4,9 @@ import io.reactivex.Single
 import io.reactivex.SingleEmitter
 import io.realm.Realm
 import io.realm.Sort
+import me.arakmmis.contactsapp.R
 import me.arakmmis.contactsapp.businesslogic.models.Contact
+import me.arakmmis.contactsapp.utils.App
 import java.util.*
 
 class ContactsRepo : ContactsManager {
@@ -38,6 +40,18 @@ class ContactsRepo : ContactsManager {
                     .findFirst()
 
             received.onSuccess(realm.copyFromRealm(realmContact))
+        }
+    }
+
+    override fun deleteContact(contactId: Int): Single<String> = Single.create { received: SingleEmitter<String> ->
+        getRealmInstance().executeTransaction { realm ->
+            val realmContact = realm.where(Contact::class.java)
+                    .equalTo("id", contactId)
+                    .findFirst()
+
+            realmContact.deleteFromRealm()
+
+            received.onSuccess(App.instance?.resources!!.getString(R.string.success_message))
         }
     }
 

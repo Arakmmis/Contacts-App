@@ -6,9 +6,13 @@ interface ContactDetailsContract {
 
     interface ContactDetailsView {
         fun setContactData(contact: Contact)
+
+        fun navigateToHome()
+
+        fun toast(message: String)
     }
 
     interface ContactDetailsPresenter {
-
+        fun deleteContact(contactId: Int)
     }
 }

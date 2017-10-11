@@ -10,4 +10,6 @@ interface ContactsManager {
     fun insertContact(contact: Contact): Single<Contact>
 
     fun getContact(contactId: Int): Single<Contact>
+
+    fun deleteContact(contactId: Int): Single<String>
 }
