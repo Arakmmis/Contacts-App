@@ -4,7 +4,6 @@ import me.arakmmis.contactsapp.businesslogic.models.Address
 import me.arakmmis.contactsapp.businesslogic.models.Contact
 import me.arakmmis.contactsapp.businesslogic.models.EmailAddress
 import me.arakmmis.contactsapp.businesslogic.models.PhoneNumber
-import java.io.File
 
 /**
  * Created by arakm on 10/5/2017.
@@ -25,6 +24,16 @@ interface AddContactContract {
         fun updateEmailAddressesList(emails: List<EmailAddress>)
 
         fun navigateToContactDetails(contact: Contact)
+
+        fun showNameError(errorMessage: String)
+
+        fun showDateError(errorMessage: String)
+
+        fun showPhoneNumbersListError(errorMessage: String)
+
+        fun showEmailsListError(errorMessage: String)
+
+        fun disableFieldError(field: String)
     }
 
     interface AddContactPresenter {
@@ -40,6 +49,6 @@ interface AddContactContract {
 
         fun deleteEmailAddress(email: EmailAddress)
 
-        fun addContact(profilePicFile: File?, contactName: String, contactBirthDate: String)
+        fun addContact(profilePic: ByteArray, contactName: String, contactBirthDate: String)
     }
 }

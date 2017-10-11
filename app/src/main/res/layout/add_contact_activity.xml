@@ -57,25 +57,30 @@
                 app:riv_border_width="2dp"
                 app:riv_corner_radius="100dp"/>
 
-            <EditText
-                android:id="@+id/et_contact_name"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_contact_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/iv_contact_pic"
-                android:layout_gravity="bottom"
                 android:layout_marginEnd="32dp"
                 android:layout_marginStart="32dp"
-                android:layout_marginTop="16dp"
-                android:hint="@string/contact_name"
-                android:inputType="textCapWords"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="20sp"/>
+                android:layout_marginTop="8dp"
+                android:hint="@string/contact_name">
+
+                <EditText
+                    android:id="@+id/et_contact_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="20sp"/>
+            </android.support.design.widget.TextInputLayout>
 
             <RelativeLayout
                 android:id="@+id/rl_birth_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/et_contact_name"
+                android:layout_below="@id/til_contact_name"
                 android:layout_marginBottom="8dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp">
@@ -134,6 +139,7 @@
                     android:layout_toEndOf="@id/iv_call"/>
 
                 <ImageView
+                    android:id="@+id/iv_add_phone_number"
                     android:layout_width="wrap_content"
                     android:layout_height="35dp"
                     android:layout_below="@id/rv_phone_numbers"
@@ -143,7 +149,8 @@
                     android:paddingBottom="4dp"
                     android:paddingTop="4dp"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/add_new"/>
+                    android:src="@drawable/add_new"
+                    android:tint="@color/light_grey"/>
 
             </RelativeLayout>
 
@@ -179,6 +186,7 @@
                     android:layout_toEndOf="@id/iv_email_address"/>
 
                 <ImageView
+                    android:id="@+id/iv_add_email_address"
                     android:layout_width="wrap_content"
                     android:layout_height="35dp"
                     android:layout_below="@id/rv_email_addresses"
@@ -188,7 +196,8 @@
                     android:paddingBottom="4dp"
                     android:paddingTop="4dp"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/add_new"/>
+                    android:src="@drawable/add_new"
+                    android:tint="@color/light_grey"/>
 
             </RelativeLayout>
 
@@ -224,6 +233,7 @@
                     android:layout_toEndOf="@id/iv_address"/>
 
                 <ImageView
+                    android:id="@+id/iv_add_address"
                     android:layout_width="wrap_content"
                     android:layout_height="35dp"
                     android:layout_below="@id/rv_addresses"
@@ -233,7 +243,8 @@
                     android:paddingBottom="4dp"
                     android:paddingTop="4dp"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/add_new"/>
+                    android:src="@drawable/add_new"
+                    android:tint="@color/light_grey"/>
             </RelativeLayout>
         </RelativeLayout>
     </ScrollView>

@@ -3,6 +3,8 @@ package me.arakmmis.contactsapp.ui.addContact
 import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
@@ -26,9 +28,10 @@ import me.arakmmis.contactsapp.businesslogic.models.PhoneNumber
 import me.arakmmis.contactsapp.mvpcontracts.AddContactContract
 import me.arakmmis.contactsapp.ui.addContact.adapter.DetailsAdapter
 import me.arakmmis.contactsapp.ui.contactdetails.ContactDetailsActivity
+import me.arakmmis.contactsapp.utils.ByteArrayUtil
 import me.arakmmis.contactsapp.utils.Cache
 import me.arakmmis.contactsapp.utils.Callback
-import me.arakmmis.contactsapp.utils.Const
+import me.arakmmis.contactsapp.utils.ValidationUtil
 import pl.aprilapps.easyphotopicker.DefaultCallback
 import pl.aprilapps.easyphotopicker.EasyImage
 import java.io.File
@@ -37,7 +40,7 @@ import java.util.*
 class AddContactActivity : AllowMeActivity(), AddContactContract.AddContactView, DatePickerDialog.OnDateSetListener {
 
     private lateinit var presenter: AddContactContract.AddContactPresenter
-    private var profilePicFile: File? = null
+    private lateinit var profilePic: ByteArray
 
     private lateinit var adapterPhoneNumbers: DetailsAdapter<PhoneNumber>
     private lateinit var adapterAddresses: DetailsAdapter<Address>
@@ -76,6 +79,8 @@ class AddContactActivity : AllowMeActivity(), AddContactContract.AddContactView,
     }
 
     private fun initUI() {
+        profilePic = ByteArrayUtil.fromBitmap(BitmapFactory.decodeResource(resources, R.drawable.placeholder_add_profile_pic))
+
         rv_phone_numbers.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         rv_phone_numbers.isNestedScrollingEnabled = false
         adapterPhoneNumbers = DetailsAdapter<PhoneNumber>(
@@ -157,6 +162,7 @@ class AddContactActivity : AllowMeActivity(), AddContactContract.AddContactView,
         }
 
         tv_birth_date.text = String.format(Locale.US, "%s %s %s", dayOfMonth, month, year)
+        disableFieldError(ValidationUtil.DATE_KEY)
     }
 
     fun openChooserDialog(v: View) {
@@ -213,7 +219,7 @@ class AddContactActivity : AllowMeActivity(), AddContactContract.AddContactView,
                         .load(imageFiles[0])
                         .into(iv_contact_pic)
 
-                profilePicFile = imageFiles[0]
+                profilePic = ByteArrayUtil.fromFile(imageFiles[0])
             }
 
             override fun onImagePickerError(e: Exception?, source: EasyImage.ImageSource?, type: Int) {
@@ -268,6 +274,8 @@ class AddContactActivity : AllowMeActivity(), AddContactContract.AddContactView,
         if (alertDialogPhoneNumber.isShowing) {
             alertDialogPhoneNumber.dismiss()
         }
+
+        disableFieldError(ValidationUtil.PHONE_NUMBERS_KEY)
     }
 
     fun addAddress(v: View) {
@@ -336,17 +344,42 @@ class AddContactActivity : AllowMeActivity(), AddContactContract.AddContactView,
         if (alertDialogEmailAddress.isShowing) {
             alertDialogEmailAddress.dismiss()
         }
+
+        disableFieldError(ValidationUtil.EMAILS_KEY)
     }
 
     fun addContact(v: View) {
-        presenter.addContact(profilePicFile!!,
+        presenter.addContact(profilePic,
                 et_contact_name.text.toString().trim(),
                 tv_birth_date.text.toString().trim())
     }
 
     override fun navigateToContactDetails(contact: Contact) {
-        val intent = Intent(this@AddContactActivity, ContactDetailsActivity::class.java)
-        intent.putExtra(Const.CONTACT_ID_KEY, contact)
-        startActivity(intent)
+        ContactDetailsActivity.start(this@AddContactActivity, contact.id)
+    }
+
+    override fun showNameError(errorMessage: String) {
+        til_contact_name.error = errorMessage
+    }
+
+    override fun showDateError(errorMessage: String) {
+        tv_birth_date.setTextColor(Color.argb(255, 255, 0, 0))
+    }
+
+    override fun showPhoneNumbersListError(errorMessage: String) {
+        iv_add_phone_number.setColorFilter(Color.argb(255, 255, 0, 0))
+    }
+
+    override fun showEmailsListError(errorMessage: String) {
+        iv_add_email_address.setColorFilter(Color.argb(255, 255, 0, 0))
+    }
+
+    override fun disableFieldError(field: String) {
+        when (field) {
+            ValidationUtil.NAME_KEY -> til_contact_name.isErrorEnabled = false
+            ValidationUtil.DATE_KEY -> tv_birth_date.setTextColor(Color.argb(255, 0, 0, 0))
+            ValidationUtil.PHONE_NUMBERS_KEY -> iv_add_phone_number.setColorFilter(Color.argb(255, 174, 174, 174))
+            ValidationUtil.EMAILS_KEY -> iv_add_email_address.setColorFilter(Color.argb(255, 174, 174, 174))
+        }
     }
 }
