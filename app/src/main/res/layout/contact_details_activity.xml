@@ -50,7 +50,6 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="56dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/placeholder_profile_pic"
                 app:riv_border_color="@color/colorPrimary"
                 app:riv_border_width="2dp"
                 app:riv_corner_radius="100dp"/>
@@ -64,7 +63,6 @@
                 android:layout_marginTop="16dp"
                 android:paddingEnd="32dp"
                 android:paddingStart="32dp"
-                android:text="Naruto Uzumaki"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="26sp"/>
 
@@ -93,7 +91,6 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="16dp"
                     android:layout_toEndOf="@id/iv_date"
-                    android:text="19 Jan 1996"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="16sp"/>
             </RelativeLayout>

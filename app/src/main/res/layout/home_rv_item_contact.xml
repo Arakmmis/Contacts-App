@@ -23,7 +23,6 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/placeholder_profile_pic"
             app:riv_corner_radius="50dp"/>
 
         <ImageView
@@ -64,7 +63,6 @@
                 android:layout_marginBottom="2dp"
                 android:layout_weight="1"
                 android:maxLines="1"
-                android:text="Naruto Uzumaki"
                 android:textColor="@android:color/black"
                 android:textSize="16sp"/>
 
@@ -75,7 +73,6 @@
                 android:layout_marginTop="2dp"
                 android:layout_weight="1"
                 android:maxLines="1"
-                android:text="+201127400311"
                 android:textColor="@color/light_violet"
                 android:textSize="14sp"/>
         </LinearLayout>
