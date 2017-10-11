@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import android.widget.Toast
 import kotlinx.android.synthetic.main.home_activity.*
 import me.arakmmis.contactsapp.R
 import me.arakmmis.contactsapp.businesslogic.models.Contact
@@ -20,9 +21,8 @@ import me.arakmmis.contactsapp.utils.Callback
  */
 class HomeActivity : AppCompatActivity(), HomeContract.HomeView, Callback<Contact> {
 
-    lateinit var presenter: HomeContract.HomePresenter
-
-    var adapterContacts: ContactsAdapter? = null
+    private lateinit var presenter: HomeContract.HomePresenter
+    private var adapterContacts: ContactsAdapter? = null
 
     companion object {
         fun start(context: Context) {
@@ -40,11 +40,15 @@ class HomeActivity : AppCompatActivity(), HomeContract.HomeView, Callback<Contac
     }
 
     override fun setContacts(contacts: List<Contact>) {
-        if (adapterContacts == null) {
-            adapterContacts = ContactsAdapter(this, contacts)
-            rv_contacts.adapter = adapterContacts
+        if (contacts.isEmpty()) {
+            Toast.makeText(this@HomeActivity, getString(R.string.no_contacts_to_display), Toast.LENGTH_SHORT).show()
         } else {
-            adapterContacts?.setData(contacts)
+            if (adapterContacts == null) {
+                adapterContacts = ContactsAdapter(this, contacts)
+                rv_contacts.adapter = adapterContacts
+            } else {
+                adapterContacts?.setData(contacts)
+            }
         }
     }
 

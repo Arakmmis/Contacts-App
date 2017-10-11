@@ -6,13 +6,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import me.arakmmis.contactsapp.businesslogic.contacts.ContactsManager
-import me.arakmmis.contactsapp.businesslogic.contacts.TestContactsRepo
+import me.arakmmis.contactsapp.businesslogic.contacts.ContactsRepo
 import me.arakmmis.contactsapp.businesslogic.models.Contact
 import me.arakmmis.contactsapp.mvpcontracts.ContactDetailsContract
 
 class ContactDetailsPresenter(val contactDetailsView: ContactDetailsContract.ContactDetailsView, val contactId: Int) : ContactDetailsContract.ContactDetailsPresenter {
 
-    private val contactsManager: ContactsManager = TestContactsRepo()
+    private val contactsManager: ContactsManager = ContactsRepo()
 
     init {
         getContactData(contactId)

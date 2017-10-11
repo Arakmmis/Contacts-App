@@ -6,7 +6,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import me.arakmmis.contactsapp.businesslogic.contacts.ContactsManager
-import me.arakmmis.contactsapp.businesslogic.contacts.TestContactsRepo
+import me.arakmmis.contactsapp.businesslogic.contacts.ContactsRepo
 import me.arakmmis.contactsapp.businesslogic.models.Address
 import me.arakmmis.contactsapp.businesslogic.models.Contact
 import me.arakmmis.contactsapp.businesslogic.models.EmailAddress
@@ -18,7 +18,7 @@ import me.arakmmis.contactsapp.utils.ValidationUtil
 
 class AddContactPresenter(private val addContactView: AddContactContract.AddContactView) : AddContactContract.AddContactPresenter {
 
-    private val contactsManager: ContactsManager = TestContactsRepo()
+    private val contactsManager: ContactsManager = ContactsRepo()
 
     override fun addPhoneNumber(phoneNumber: PhoneNumber) {
         val result = ValidationUtil.errorsInPhoneNumber(phoneNumber.number)
@@ -138,8 +138,6 @@ class AddContactPresenter(private val addContactView: AddContactContract.AddCont
 
     override fun addContact(profilePic: ByteArray, contactName: String, contactBirthDate: String) {
         if (validateInput(contactName, contactBirthDate)) {
-            Log.d("ACP: addContact", "Default Number: " + Cache.getPhoneNumbers().filter { phoneNumber -> phoneNumber.type == "Default" }[0].number)
-
             val contact = Contact(name = contactName,
                     profilePic = profilePic,
                     dateOfBirth = contactBirthDate,

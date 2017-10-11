@@ -14,13 +14,9 @@ class App : Application() {
         super.onCreate()
         Hawk.init(this).build()
         Realm.init(this);
-
-        realm = Realm.getDefaultInstance()
     }
 
     companion object {
         var instance: App? = null
-
-        var realm: Realm? = null
     }
 }

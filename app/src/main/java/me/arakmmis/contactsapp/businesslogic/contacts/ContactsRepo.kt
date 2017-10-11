@@ -2,26 +2,27 @@ package me.arakmmis.contactsapp.businesslogic.contacts
 
 import io.reactivex.Single
 import io.reactivex.SingleEmitter
+import io.realm.Realm
 import me.arakmmis.contactsapp.businesslogic.models.Contact
-import me.arakmmis.contactsapp.utils.App
 import java.util.*
 
 class ContactsRepo : ContactsManager {
 
     override fun getContacts(): Single<List<Contact>> = Single.create { received: SingleEmitter<List<Contact>> ->
-        App.realm?.executeTransaction { realm ->
+        getRealmInstance().executeTransaction { realm ->
             val realmContacts = realm.where(Contact::class.java)
                     .findAll()
 
+            val copiedFromRealm = realm.copyFromRealm(realmContacts)
             val contacts: ArrayList<Contact> = ArrayList<Contact>()
-            realmContacts.forEach { contact -> contacts.add(contact) }
+            copiedFromRealm.forEach { contact -> contacts.add(contact) }
 
             received.onSuccess(contacts)
         }
     }
 
     override fun insertContact(contact: Contact): Single<Contact> = Single.create { received: SingleEmitter<Contact> ->
-        App.realm?.executeTransaction { realm ->
+        getRealmInstance().executeTransaction { realm ->
             realm.insert(contact)
         }
 
@@ -29,12 +30,14 @@ class ContactsRepo : ContactsManager {
     }
 
     override fun getContact(contactId: Int): Single<Contact> = Single.create { received: SingleEmitter<Contact> ->
-        App.realm?.executeTransaction { realm ->
+        getRealmInstance().executeTransaction { realm ->
             val realmContact = realm.where(Contact::class.java)
                     .equalTo("id", contactId)
                     .findFirst()
 
-            received.onSuccess(realmContact)
+            received.onSuccess(realm.copyFromRealm(realmContact))
         }
     }
+
+    private fun getRealmInstance(): Realm = Realm.getDefaultInstance()
 }
