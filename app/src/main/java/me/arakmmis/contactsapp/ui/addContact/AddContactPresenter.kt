@@ -24,8 +24,13 @@ class AddContactPresenter(private val addContactView: AddContactContract.AddCont
         val result = ValidationUtil.errorsInPhoneNumber(phoneNumber.number)
 
         if (result == ValidationUtil.NO_ERRORS) {
-            if (!Cache.getPhoneNumbers().contains(phoneNumber)) {
+            var exists = false
+            Cache.getPhoneNumbers().forEach { existingPhoneNumber ->
+                if (phoneNumber.number == existingPhoneNumber.number)
+                    exists = true
+            }
 
+            if (!exists) {
                 if (phoneNumber.type == "Default") {
                     Cache.setDefaultTypeUsed(true)
                 }
@@ -36,7 +41,7 @@ class AddContactPresenter(private val addContactView: AddContactContract.AddCont
                 Cache.setPhoneNumbers(newNumbers)
                 addContactView.updatePhoneList(newNumbers)
             } else {
-                addContactView.showPhoneNumberError("Phone Number already entered")
+                addContactView.showPhoneNumberError("Phone Number Already Exists")
             }
         } else {
             addContactView.showPhoneNumberError(result)
@@ -68,15 +73,20 @@ class AddContactPresenter(private val addContactView: AddContactContract.AddCont
         val result = ValidationUtil.errorsInAddress(address.address)
 
         if (result == ValidationUtil.NO_ERRORS) {
-            if (!Cache.getAddresses().contains(address)) {
+            var exists = false
+            Cache.getAddresses().forEach { existingAddress ->
+                if (address.address == existingAddress.address)
+                    exists = true
+            }
 
+            if (!exists) {
                 val newAddress = Cache.getAddresses()
 
                 newAddress.add(address)
                 Cache.setAddresses(newAddress)
                 addContactView.updateAddressList(newAddress)
             } else {
-                addContactView.showAddressError("Address already entered")
+                addContactView.showAddressError("Address Already Exists")
             }
         } else {
             addContactView.showAddressError(result)
@@ -104,15 +114,20 @@ class AddContactPresenter(private val addContactView: AddContactContract.AddCont
         val result = ValidationUtil.errorsInEmail(email.emailAddress)
 
         if (result == ValidationUtil.NO_ERRORS) {
-            if (!Cache.getEmails().contains(email)) {
+            var exists = false
+            Cache.getEmails().forEach { existingEmail ->
+                if (email.emailAddress == existingEmail.emailAddress)
+                    exists = true
+            }
 
+            if (!exists) {
                 val newEmails = Cache.getEmails()
 
                 newEmails.add(email)
                 Cache.setEmails(newEmails)
                 addContactView.updateEmailAddressesList(newEmails)
             } else {
-                addContactView.showEmailAddressError("Email Address already entered")
+                addContactView.showEmailAddressError("Email Address Already Exists")
             }
         } else {
             addContactView.showEmailAddressError(result)
