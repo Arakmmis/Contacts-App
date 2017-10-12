@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    tools:context=".ui.add.AddContactActivity">
+    tools:context=".ui.edit.EditContactActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:onClick="addContact"
+        android:onClick="submitChanges"
         android:src="@drawable/ic_check_black_24dp"
         android:tint="@android:color/white"
         app:fabSize="normal"/>

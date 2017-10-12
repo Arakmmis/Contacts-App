@@ -17,7 +17,7 @@ import me.arakmmis.contactsapp.utils.ValidationUtil
 
 class EditContactPresenter(val view: EditContactContract.EditContactView, val contactId: Int) : EditContactContract.EditContactPresenter {
 
-    val contactsManager: ContactsManager = ContactsRepo()
+    private val contactsManager: ContactsManager = ContactsRepo()
 
     init {
         getContactData(contactId)
@@ -74,20 +74,18 @@ class EditContactPresenter(val view: EditContactContract.EditContactView, val co
             Cache.setDefaultTypeUsed(false)
         }
 
-        val itemToBeDeleted = Cache.getPhoneNumbers().indexOf(phoneNumber)
-
-        val newNumbers: List<PhoneNumber>
-
         if (Cache.getPhoneNumbers().size == 1) {
-            newNumbers = ArrayList<PhoneNumber>()
+            Cache.setPhoneNumbers(ArrayList<PhoneNumber>())
+            view.updatePhoneList(Cache.getPhoneNumbers())
         } else {
-            val numbersBeforeDeleted = Cache.getPhoneNumbers().slice(IntRange(0, itemToBeDeleted - 1))
-            val numbersAfterDeleted = Cache.getPhoneNumbers().slice(IntRange(itemToBeDeleted + 1, Cache.getPhoneNumbers().size - 1))
-            newNumbers = numbersBeforeDeleted + numbersAfterDeleted
+            val newNumbers = ArrayList<PhoneNumber>()
+            Cache.getPhoneNumbers().forEach { existingPhoneNumber ->
+                if (phoneNumber.number != existingPhoneNumber.number)
+                    newNumbers.add(existingPhoneNumber)
+            }
+            Cache.setPhoneNumbers(newNumbers)
+            view.updatePhoneList(newNumbers)
         }
-
-        Cache.setPhoneNumbers(newNumbers)
-        view.updatePhoneList(newNumbers)
     }
 
     override fun addAddress(address: Address) {
@@ -115,16 +113,13 @@ class EditContactPresenter(val view: EditContactContract.EditContactView, val co
     }
 
     override fun deleteAddress(address: Address) {
-        val itemToBeDeleted = Cache.getAddresses().indexOf(address)
+        val newAddresses = ArrayList<Address>()
 
-        val newAddresses: List<Address>
-
-        if (Cache.getAddresses().size == 1) {
-            newAddresses = ArrayList<Address>()
-        } else {
-            val addressesBeforeDeleted = Cache.getAddresses().slice(IntRange(0, itemToBeDeleted - 1))
-            val addressesAfterDeleted = Cache.getAddresses().slice(IntRange(itemToBeDeleted + 1, Cache.getAddresses().size - 1))
-            newAddresses = addressesBeforeDeleted + addressesAfterDeleted
+        if (Cache.getAddresses().size != 1) {
+            Cache.getAddresses().forEach { existingAddress ->
+                if (address.address != existingAddress.address)
+                    newAddresses.add(existingAddress)
+            }
         }
 
         Cache.setAddresses(newAddresses)
@@ -156,16 +151,13 @@ class EditContactPresenter(val view: EditContactContract.EditContactView, val co
     }
 
     override fun deleteEmailAddress(email: EmailAddress) {
-        val itemToBeDeleted = Cache.getEmails().indexOf(email)
+        val newEmails = ArrayList<EmailAddress>()
 
-        val newEmails: List<EmailAddress>
-
-        if (Cache.getEmails().size == 1) {
-            newEmails = ArrayList<EmailAddress>()
-        } else {
-            val emailsBeforeDeleted = Cache.getEmails().slice(IntRange(0, itemToBeDeleted - 1))
-            val emailsAfterDeleted = Cache.getEmails().slice(IntRange(itemToBeDeleted + 1, Cache.getEmails().size - 1))
-            newEmails = emailsBeforeDeleted + emailsAfterDeleted
+        if (Cache.getEmails().size != 1) {
+            Cache.getEmails().forEach { existingEmail ->
+                if (email.emailAddress != existingEmail.emailAddress)
+                    newEmails.add(existingEmail)
+            }
         }
 
         Cache.setEmails(newEmails)

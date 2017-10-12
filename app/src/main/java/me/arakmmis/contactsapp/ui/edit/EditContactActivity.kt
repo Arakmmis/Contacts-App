@@ -3,7 +3,6 @@ package me.arakmmis.contactsapp.ui.edit
 import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
@@ -11,9 +10,14 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
+import android.widget.ArrayAdapter
 import com.aitorvs.android.allowme.AllowMe
 import com.bumptech.glide.Glide
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
+import io.reactivex.Single
+import io.reactivex.SingleEmitter
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.add_contact_dialog_address.view.*
 import kotlinx.android.synthetic.main.add_contact_dialog_email_address.view.*
 import kotlinx.android.synthetic.main.add_contact_dialog_phone_number.view.*
@@ -25,13 +29,14 @@ import me.arakmmis.contactsapp.businesslogic.models.Contact
 import me.arakmmis.contactsapp.businesslogic.models.EmailAddress
 import me.arakmmis.contactsapp.businesslogic.models.PhoneNumber
 import me.arakmmis.contactsapp.mvpcontracts.EditContactContract
-import me.arakmmis.contactsapp.ui.add.adapter.DetailsAdapter
 import me.arakmmis.contactsapp.ui.details.ContactDetailsActivity
+import me.arakmmis.contactsapp.ui.edit.adapter.DetailsAdapter
 import me.arakmmis.contactsapp.utils.*
 import pl.aprilapps.easyphotopicker.DefaultCallback
 import pl.aprilapps.easyphotopicker.EasyImage
 import java.io.File
 import java.util.*
+import kotlin.collections.ArrayList
 
 class EditContactActivity : AppCompatActivity(), EditContactContract.EditContactView, DatePickerDialog.OnDateSetListener {
 
@@ -42,16 +47,16 @@ class EditContactActivity : AppCompatActivity(), EditContactContract.EditContact
     private lateinit var adapterAddresses: DetailsAdapter<Address>
     private lateinit var adapterEmailAddress: DetailsAdapter<EmailAddress>
 
-    private lateinit var dialogViewPhoneNumber: View
-    private lateinit var alertDialogPhoneNumber: AlertDialog
+    private var dialogViewPhoneNumber: View? = null
+    private var alertDialogPhoneNumber: AlertDialog? = null
 
-    private lateinit var dialogViewAddress: View
-    private lateinit var alertDialogAddress: AlertDialog
+    private var dialogViewAddress: View? = null
+    private var alertDialogAddress: AlertDialog? = null
 
-    private lateinit var dialogViewEmailAddress: View
-    private lateinit var alertDialogEmailAddress: AlertDialog
+    private var dialogViewEmailAddress: View? = null
+    private var alertDialogEmailAddress: AlertDialog? = null
 
-    val contactId by lazy {
+    private val contactId by lazy {
         intent.extras.getInt(Const.CONTACT_ID_KEY)
     }
 
@@ -81,43 +86,14 @@ class EditContactActivity : AppCompatActivity(), EditContactContract.EditContact
     }
 
     private fun initUI() {
-        profilePic = ByteArrayUtil.fromBitmap(BitmapFactory.decodeResource(resources, R.drawable.placeholder_add_profile_pic))
-
         rv_phone_numbers.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         rv_phone_numbers.isNestedScrollingEnabled = false
-        adapterPhoneNumbers = DetailsAdapter<PhoneNumber>(
-                R.layout.add_contact_rv_item_phone_number,
-                Cache.getPhoneNumbers(),
-                object : Callback<PhoneNumber> {
-                    override fun onClick(item: PhoneNumber) {
-                        presenter.deletePhoneNumber(item)
-                    }
-                })
-        rv_phone_numbers.adapter = adapterPhoneNumbers
 
         rv_email_addresses.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         rv_email_addresses.isNestedScrollingEnabled = false
-        adapterEmailAddress = DetailsAdapter<EmailAddress>(
-                R.layout.add_contact_rv_item_email_address,
-                Cache.getEmails(),
-                object : Callback<EmailAddress> {
-                    override fun onClick(item: EmailAddress) {
-                        presenter.deleteEmailAddress(item)
-                    }
-                })
-        rv_email_addresses.adapter = adapterEmailAddress
 
         rv_addresses.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         rv_addresses.isNestedScrollingEnabled = false
-        adapterAddresses = DetailsAdapter<Address>(
-                R.layout.add_contact_rv_item_address,
-                Cache.getAddresses(),
-                object : Callback<Address> {
-                    override fun onClick(item: Address) {
-                        presenter.deleteAddress(item)
-                    }
-                })
-        rv_addresses.adapter = adapterAddresses
     }
 
     override fun setContactData(contact: Contact) {
@@ -128,19 +104,96 @@ class EditContactActivity : AppCompatActivity(), EditContactContract.EditContact
         et_contact_name.setText(contact.name)
         tv_birth_date.text = contact.dateOfBirth
 
-        rv_phone_numbers.adapter = me.arakmmis.contactsapp.ui.details.adapter.DetailsAdapter<PhoneNumber>(R.layout.contact_details_rv_item_phone_number,
-                contact.phoneNumbers)
-        rv_email_addresses.adapter = me.arakmmis.contactsapp.ui.details.adapter.DetailsAdapter<EmailAddress>(R.layout.contact_details_rv_item_email_address,
-                contact.emailAddresses)
+        convertPhoneNumbers(contact)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { phoneNumbers, e ->
+                    if (phoneNumbers != null) {
+                        Cache.setPhoneNumbers(phoneNumbers)
+                        adapterPhoneNumbers = DetailsAdapter<PhoneNumber>(R.layout.edit_contact_rv_item_phone_number,
+                                Cache.getPhoneNumbers(),
+                                object : Callback<PhoneNumber> {
+                                    override fun onClick(item: PhoneNumber) {
+                                        presenter.deletePhoneNumber(item)
+                                    }
+                                })
+                        rv_phone_numbers.adapter = adapterPhoneNumbers
+                    }
 
-        if (contact.addresses.isEmpty()) {
-            rl_addresses.visibility = View.GONE
-        } else {
-            rv_addresses.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-            rv_addresses.isNestedScrollingEnabled = false
-            rv_addresses.adapter = me.arakmmis.contactsapp.ui.details.adapter.DetailsAdapter<Address>(R.layout.contact_details_rv_item_address,
-                    contact.addresses)
+                    if (e != null) {
+                        Log.e("ECA: setContact pn", e.message)
+                    }
+                }
+
+
+        convertEmailAddresses(contact)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { emails, e ->
+                    if (emails != null) {
+                        Cache.setEmails(emails)
+                        adapterEmailAddress = DetailsAdapter<EmailAddress>(R.layout.edit_contact_rv_item_email_address,
+                                Cache.getEmails(),
+                                object : Callback<EmailAddress> {
+                                    override fun onClick(item: EmailAddress) {
+                                        presenter.deleteEmailAddress(item)
+                                    }
+                                })
+                        rv_email_addresses.adapter = adapterEmailAddress
+                    }
+
+                    if (e != null) {
+                        Log.e("ECA: setContact, ea", e.message)
+                    }
+                }
+
+        convertAddresses(contact)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { addresses, e ->
+                    if (addresses != null) {
+                        Cache.setAddresses(addresses)
+                        adapterAddresses = DetailsAdapter<Address>(R.layout.edit_contact_rv_item_address,
+                                Cache.getAddresses(),
+                                object : Callback<Address> {
+                                    override fun onClick(item: Address) {
+                                        presenter.deleteAddress(item)
+                                    }
+                                })
+                        rv_addresses.adapter = adapterAddresses
+                    }
+
+                    if (e != null) {
+                        Log.e("ECA: setContact add", e.message)
+                    }
+                }
+
+    }
+
+    private fun convertPhoneNumbers(contact: Contact): Single<ArrayList<PhoneNumber>> = Single.create { received: SingleEmitter<ArrayList<PhoneNumber>> ->
+        val contactPhoneNumbers = ArrayList<PhoneNumber>()
+        contact.phoneNumbers.forEach { phoneNumber ->
+            if (phoneNumber.type == "Default") Cache.setDefaultTypeUsed(true)
+
+            contactPhoneNumbers.add(PhoneNumber(number = phoneNumber.number, type = phoneNumber.type))
         }
+        received.onSuccess(contactPhoneNumbers)
+    }
+
+    private fun convertEmailAddresses(contact: Contact): Single<ArrayList<EmailAddress>> = Single.create { received: SingleEmitter<ArrayList<EmailAddress>> ->
+        val contactEmails = ArrayList<EmailAddress>()
+        contact.emailAddresses.forEach { email ->
+            contactEmails.add(EmailAddress(emailAddress = email.emailAddress, type = email.type))
+        }
+        received.onSuccess(contactEmails)
+    }
+
+    private fun convertAddresses(contact: Contact): Single<ArrayList<Address>> = Single.create { received: SingleEmitter<ArrayList<Address>> ->
+        val contactAddresses = ArrayList<Address>()
+        contact.addresses.forEach { address ->
+            contactAddresses.add(Address(address = address.address, type = address.type))
+        }
+        received.onSuccess(contactAddresses)
     }
 
     fun openDatePickerDialog(v: View) {
@@ -260,43 +313,108 @@ class EditContactActivity : AppCompatActivity(), EditContactContract.EditContact
         })
     }
 
+    fun addPhoneNumber(v: View) {
+        dialogViewPhoneNumber = layoutInflater.inflate(R.layout.add_contact_dialog_phone_number, null)
+        alertDialogPhoneNumber = AlertDialog.Builder(this).setView(dialogViewPhoneNumber).create()
+
+        val adapterPhoneNumbers: ArrayAdapter<CharSequence>
+
+        if (Cache.isDefaultTypeUsed()) {
+            adapterPhoneNumbers = ArrayAdapter.createFromResource(dialogViewPhoneNumber?.context,
+                    R.array.phone_number_types_without_default_array, android.R.layout.simple_spinner_item)
+        } else {
+            adapterPhoneNumbers = ArrayAdapter.createFromResource(dialogViewPhoneNumber?.context,
+                    R.array.phone_number_types_array, android.R.layout.simple_spinner_item)
+        }
+
+        adapterPhoneNumbers.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        dialogViewPhoneNumber?.spinner_phone_number_type?.adapter = adapterPhoneNumbers
+
+        dialogViewPhoneNumber?.ok_pn?.setOnClickListener { _ ->
+            presenter.addPhoneNumber(PhoneNumber(number = dialogViewPhoneNumber?.et_phone_number?.text.toString().trim(),
+                    type = dialogViewPhoneNumber?.spinner_phone_number_type?.selectedItem.toString()))
+        }
+
+        dialogViewPhoneNumber?.cancel_pn?.setOnClickListener { _ ->
+            alertDialogPhoneNumber?.dismiss()
+        }
+
+        alertDialogPhoneNumber?.show()
+    }
+
     override fun showPhoneNumberError(errorMessage: String) {
-        dialogViewPhoneNumber.til_phone_number.error = errorMessage
+        dialogViewPhoneNumber?.til_phone_number?.error = errorMessage
     }
 
     override fun updatePhoneList(phoneNumbers: List<PhoneNumber>) {
         adapterPhoneNumbers.setData(phoneNumbers)
 
-        if (alertDialogPhoneNumber.isShowing) {
-            alertDialogPhoneNumber.dismiss()
-        }
-
+        alertDialogPhoneNumber?.dismiss()
         disableFieldError(ValidationUtil.PHONE_NUMBERS_KEY)
     }
 
+    fun addAddress(v: View) {
+        dialogViewAddress = layoutInflater.inflate(R.layout.add_contact_dialog_address, null)
+        alertDialogAddress = AlertDialog.Builder(this).setView(dialogViewAddress).create()
+
+        val adapterAddress = ArrayAdapter.createFromResource(dialogViewAddress?.context,
+                R.array.address_types_array, android.R.layout.simple_spinner_item)
+
+        adapterAddress.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        dialogViewAddress?.spinner_address_type?.adapter = adapterAddress
+
+        dialogViewAddress?.ok_a?.setOnClickListener { _ ->
+            presenter.addAddress(Address(address = dialogViewAddress?.et_address?.text.toString().trim(),
+                    type = dialogViewAddress?.spinner_address_type?.selectedItem.toString()))
+        }
+
+        dialogViewAddress?.cancel_a?.setOnClickListener { _ ->
+            alertDialogAddress?.dismiss()
+        }
+
+        alertDialogAddress?.show()
+    }
+
     override fun showAddressError(errorMessage: String) {
-        dialogViewAddress.til_address.error = errorMessage
+        dialogViewAddress?.til_address?.error = errorMessage
     }
 
     override fun updateAddressList(addresses: List<Address>) {
         adapterAddresses.setData(addresses)
 
-        if (alertDialogAddress.isShowing) {
-            alertDialogAddress.dismiss()
+        alertDialogAddress?.dismiss()
+    }
+
+    fun addEmailAddress(v: View) {
+        dialogViewEmailAddress = layoutInflater.inflate(R.layout.add_contact_dialog_email_address, null)
+        alertDialogEmailAddress = AlertDialog.Builder(this).setView(dialogViewEmailAddress).create()
+
+        val adapterEmailAddress = ArrayAdapter.createFromResource(dialogViewEmailAddress?.context,
+                R.array.email_address_array, android.R.layout.simple_spinner_item)
+
+        adapterEmailAddress.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        dialogViewEmailAddress?.spinner_email_address_type?.adapter = adapterEmailAddress
+
+        dialogViewEmailAddress?.ok_ea?.setOnClickListener { _ ->
+            presenter.addEmailAddress(EmailAddress(emailAddress = dialogViewEmailAddress?.et_email_address?.text.toString().trim(),
+                    type = dialogViewEmailAddress?.spinner_email_address_type?.selectedItem.toString()))
         }
+
+        dialogViewEmailAddress?.cancel_ea?.setOnClickListener { _ ->
+            alertDialogEmailAddress?.dismiss()
+        }
+
+        alertDialogEmailAddress?.show()
     }
 
     override fun showEmailAddressError(errorMessage: String) {
-        dialogViewEmailAddress.til_email_address.error = errorMessage
+        dialogViewEmailAddress?.til_email_address?.error = errorMessage
     }
 
     override fun updateEmailAddressesList(emails: List<EmailAddress>) {
         adapterEmailAddress.setData(emails)
 
-        if (alertDialogEmailAddress.isShowing) {
-            alertDialogEmailAddress.dismiss()
-        }
-
+        alertDialogEmailAddress?.dismiss()
         disableFieldError(ValidationUtil.EMAILS_KEY)
     }
 
@@ -327,5 +445,9 @@ class EditContactActivity : AppCompatActivity(), EditContactContract.EditContact
             ValidationUtil.PHONE_NUMBERS_KEY -> iv_add_phone_number.setColorFilter(Color.argb(255, 174, 174, 174))
             ValidationUtil.EMAILS_KEY -> iv_add_email_address.setColorFilter(Color.argb(255, 174, 174, 174))
         }
+    }
+
+    fun submitChanges(v: View) {
+
     }
 }

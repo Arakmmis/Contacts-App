@@ -23,6 +23,8 @@ class ContactsRepo : ContactsManager {
 
             received.onSuccess(contacts)
         }
+
+        getRealmInstance().close()
     }
 
     override fun insertContact(contact: Contact): Single<Contact> = Single.create { received: SingleEmitter<Contact> ->
@@ -31,6 +33,7 @@ class ContactsRepo : ContactsManager {
         }
 
         received.onSuccess(contact)
+        getRealmInstance().close()
     }
 
     override fun getContact(contactId: Int): Single<Contact> = Single.create { received: SingleEmitter<Contact> ->
@@ -41,6 +44,8 @@ class ContactsRepo : ContactsManager {
 
             received.onSuccess(realm.copyFromRealm(realmContact))
         }
+
+        getRealmInstance().close()
     }
 
     override fun deleteContact(contactId: Int): Single<String> = Single.create { received: SingleEmitter<String> ->
@@ -53,6 +58,8 @@ class ContactsRepo : ContactsManager {
 
             received.onSuccess(App.instance?.resources!!.getString(R.string.success_message))
         }
+
+        getRealmInstance().close()
     }
 
     private fun getRealmInstance(): Realm = Realm.getDefaultInstance()

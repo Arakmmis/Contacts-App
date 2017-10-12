@@ -16,8 +16,7 @@ class ContactViewHolder(itemView: View?, listener: Callback<Contact>) : Recycler
     lateinit var contact: Contact
 
     init {
-        itemView?.iv_contact_pic?.setOnClickListener { _ -> listener.onClick(contact) }
-        itemView?.ll_contact_mini_details?.setOnClickListener { _ -> listener.onClick(contact) }
+        itemView?.rl_contact_details?.setOnClickListener { _ -> listener.onClick(contact) }
 
         itemView?.iv_call?.setOnClickListener { _ ->
             val intent = Intent(Intent.ACTION_DIAL)
