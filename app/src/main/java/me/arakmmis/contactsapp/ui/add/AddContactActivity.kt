@@ -1,4 +1,4 @@
-package me.arakmmis.contactsapp.ui.addContact
+package me.arakmmis.contactsapp.ui.add
 
 import android.Manifest
 import android.content.Context
@@ -26,8 +26,8 @@ import me.arakmmis.contactsapp.businesslogic.models.Contact
 import me.arakmmis.contactsapp.businesslogic.models.EmailAddress
 import me.arakmmis.contactsapp.businesslogic.models.PhoneNumber
 import me.arakmmis.contactsapp.mvpcontracts.AddContactContract
-import me.arakmmis.contactsapp.ui.addContact.adapter.DetailsAdapter
-import me.arakmmis.contactsapp.ui.contactdetails.ContactDetailsActivity
+import me.arakmmis.contactsapp.ui.add.adapter.DetailsAdapter
+import me.arakmmis.contactsapp.ui.details.ContactDetailsActivity
 import me.arakmmis.contactsapp.utils.ByteArrayUtil
 import me.arakmmis.contactsapp.utils.Cache
 import me.arakmmis.contactsapp.utils.Callback

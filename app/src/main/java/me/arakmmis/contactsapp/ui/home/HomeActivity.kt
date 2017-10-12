@@ -11,8 +11,8 @@ import kotlinx.android.synthetic.main.home_activity.*
 import me.arakmmis.contactsapp.R
 import me.arakmmis.contactsapp.businesslogic.models.Contact
 import me.arakmmis.contactsapp.mvpcontracts.HomeContract
-import me.arakmmis.contactsapp.ui.addContact.AddContactActivity
-import me.arakmmis.contactsapp.ui.contactdetails.ContactDetailsActivity
+import me.arakmmis.contactsapp.ui.add.AddContactActivity
+import me.arakmmis.contactsapp.ui.details.ContactDetailsActivity
 import me.arakmmis.contactsapp.ui.home.adapter.ContactsAdapter
 import me.arakmmis.contactsapp.utils.Callback
 

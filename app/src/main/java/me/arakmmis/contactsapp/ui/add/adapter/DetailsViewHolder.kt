@@ -1,4 +1,4 @@
-package me.arakmmis.contactsapp.ui.addContact.adapter
+package me.arakmmis.contactsapp.ui.add.adapter
 
 import android.support.v7.widget.RecyclerView
 import android.view.View

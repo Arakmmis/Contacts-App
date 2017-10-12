@@ -1,4 +1,4 @@
-package me.arakmmis.contactsapp.ui.contactdetails.adapter
+package me.arakmmis.contactsapp.ui.details.adapter
 
 import android.content.Intent
 import android.net.Uri

@@ -24,12 +24,12 @@
         </activity>
 
         <activity
-            android:name=".ui.contactdetails.ContactDetailsActivity"
+            android:name=".ui.details.ContactDetailsActivity"
             android:parentActivityName=".ui.home.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".ui.addContact.AddContactActivity"
+            android:name=".ui.add.AddContactActivity"
             android:parentActivityName=".ui.home.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>

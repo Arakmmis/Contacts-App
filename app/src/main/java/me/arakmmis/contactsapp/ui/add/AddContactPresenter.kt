@@ -1,4 +1,4 @@
-package me.arakmmis.contactsapp.ui.addContact
+package me.arakmmis.contactsapp.ui.add
 
 import android.util.Log
 import io.reactivex.SingleObserver

@@ -1,4 +1,4 @@
-package me.arakmmis.contactsapp.ui.contactdetails
+package me.arakmmis.contactsapp.ui.details
 
 import android.content.Context
 import android.content.Intent
@@ -19,7 +19,7 @@ import me.arakmmis.contactsapp.businesslogic.models.Contact
 import me.arakmmis.contactsapp.businesslogic.models.EmailAddress
 import me.arakmmis.contactsapp.businesslogic.models.PhoneNumber
 import me.arakmmis.contactsapp.mvpcontracts.ContactDetailsContract
-import me.arakmmis.contactsapp.ui.contactdetails.adapter.DetailsAdapter
+import me.arakmmis.contactsapp.ui.details.adapter.DetailsAdapter
 import me.arakmmis.contactsapp.ui.home.HomeActivity
 import me.arakmmis.contactsapp.utils.Const
 
