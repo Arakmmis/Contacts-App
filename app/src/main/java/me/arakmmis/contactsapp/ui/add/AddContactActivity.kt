@@ -356,6 +356,7 @@ class AddContactActivity : AllowMeActivity(), AddContactContract.AddContactView,
 
     override fun navigateToContactDetails(contact: Contact) {
         ContactDetailsActivity.start(this@AddContactActivity, contact.id)
+        finish()
     }
 
     override fun showNameError(errorMessage: String) {

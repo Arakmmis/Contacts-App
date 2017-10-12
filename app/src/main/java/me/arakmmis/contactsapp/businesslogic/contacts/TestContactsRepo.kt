@@ -122,4 +122,10 @@ class TestContactsRepo : ContactsManager {
             received.onSuccess("Contact Deleted Successfully")
         }
     }
+
+    override fun updateContact(contact: Contact): Single<Contact> {
+        return Single.create { received: SingleEmitter<Contact> ->
+            received.onSuccess(contact)
+        }
+    }
 }

@@ -47,5 +47,7 @@ interface EditContactContract {
         fun addEmailAddress(email: EmailAddress)
 
         fun deleteEmailAddress(email: EmailAddress)
+
+        fun updateContact(contactId: Int, profilePic: ByteArray, name: String, date: String)
     }
 }

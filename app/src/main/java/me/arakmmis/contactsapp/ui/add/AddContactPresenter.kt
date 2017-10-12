@@ -157,7 +157,8 @@ class AddContactPresenter(private val addContactView: AddContactContract.AddCont
                     profilePic = profilePic,
                     dateOfBirth = contactBirthDate,
                     phoneNumbers = ListUtil<PhoneNumber>().listToRealmList(Cache.getPhoneNumbers()),
-                    defaultPhoneNumber = Cache.getPhoneNumbers().filter { phoneNumber -> phoneNumber.type == "Default" }[0].number,
+                    defaultPhoneNumber = if (Cache.getPhoneNumbers().filter { phoneNumber -> phoneNumber.type == "Default" }.isEmpty()) Cache.getPhoneNumbers()[0].number
+                                    else Cache.getPhoneNumbers().filter { phoneNumber -> phoneNumber.type == "Default" }[0].number,
                     addresses = ListUtil<Address>().listToRealmList(Cache.getAddresses()),
                     emailAddresses = ListUtil<EmailAddress>().listToRealmList(Cache.getEmails()))
 

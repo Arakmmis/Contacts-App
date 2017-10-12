@@ -62,5 +62,14 @@ class ContactsRepo : ContactsManager {
         getRealmInstance().close()
     }
 
+    override fun updateContact(contact: Contact): Single<Contact> = Single.create { received: SingleEmitter<Contact> ->
+        getRealmInstance().executeTransaction { realm ->
+            realm.copyToRealmOrUpdate(contact)
+            received.onSuccess(realm.copyFromRealm(realm.where(Contact::class.java).equalTo("id", contact.id).findFirst()))
+        }
+
+        getRealmInstance().close()
+    }
+
     private fun getRealmInstance(): Realm = Realm.getDefaultInstance()
 }

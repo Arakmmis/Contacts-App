@@ -6,12 +6,12 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import com.aitorvs.android.allowme.AllowMe
+import com.aitorvs.android.allowme.AllowMeActivity
 import com.bumptech.glide.Glide
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import io.reactivex.Single
@@ -38,7 +38,7 @@ import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
 
-class EditContactActivity : AppCompatActivity(), EditContactContract.EditContactView, DatePickerDialog.OnDateSetListener {
+class EditContactActivity : AllowMeActivity(), EditContactContract.EditContactView, DatePickerDialog.OnDateSetListener {
 
     lateinit var presenter: EditContactContract.EditContactPresenter
     private lateinit var profilePic: ByteArray
@@ -97,6 +97,7 @@ class EditContactActivity : AppCompatActivity(), EditContactContract.EditContact
     }
 
     override fun setContactData(contact: Contact) {
+        profilePic = contact.profilePic
         Glide.with(this@EditContactActivity)
                 .load(contact.profilePic)
                 .into(iv_contact_pic)
@@ -420,6 +421,7 @@ class EditContactActivity : AppCompatActivity(), EditContactContract.EditContact
 
     override fun navigateToContactDetails(contact: Contact) {
         ContactDetailsActivity.start(this@EditContactActivity, contact.id)
+        finish()
     }
 
     override fun showNameError(errorMessage: String) {
@@ -448,6 +450,9 @@ class EditContactActivity : AppCompatActivity(), EditContactContract.EditContact
     }
 
     fun submitChanges(v: View) {
-
+        presenter.updateContact(contactId,
+                profilePic,
+                et_contact_name.text.toString().trim(),
+                tv_birth_date.text.toString().trim())
     }
 }

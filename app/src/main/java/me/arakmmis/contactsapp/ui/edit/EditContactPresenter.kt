@@ -13,6 +13,7 @@ import me.arakmmis.contactsapp.businesslogic.models.EmailAddress
 import me.arakmmis.contactsapp.businesslogic.models.PhoneNumber
 import me.arakmmis.contactsapp.mvpcontracts.EditContactContract
 import me.arakmmis.contactsapp.utils.Cache
+import me.arakmmis.contactsapp.utils.ListUtil
 import me.arakmmis.contactsapp.utils.ValidationUtil
 
 class EditContactPresenter(val view: EditContactContract.EditContactView, val contactId: Int) : EditContactContract.EditContactPresenter {
@@ -164,6 +165,37 @@ class EditContactPresenter(val view: EditContactContract.EditContactView, val co
         view.updateEmailAddressesList(newEmails)
     }
 
+    override fun updateContact(contactId: Int, profilePic: ByteArray, name: String, date: String) {
+        if (validateInput(name, date)) {
+            val contact = Contact(id = contactId,
+                    name = name,
+                    profilePic = profilePic,
+                    dateOfBirth = date,
+                    phoneNumbers = ListUtil<PhoneNumber>().listToRealmList(Cache.getPhoneNumbers()),
+                    defaultPhoneNumber = if (Cache.getPhoneNumbers().filter { phoneNumber -> phoneNumber.type == "Default" }.isEmpty()) Cache.getPhoneNumbers()[0].number
+                                else Cache.getPhoneNumbers().filter { phoneNumber -> phoneNumber.type == "Default" }[0].number,
+                    addresses = ListUtil<Address>().listToRealmList(Cache.getAddresses()),
+                    emailAddresses = ListUtil<EmailAddress>().listToRealmList(Cache.getEmails()))
+
+            contactsManager.updateContact(contact)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(object : SingleObserver<Contact> {
+                        override fun onError(e: Throwable) {
+                            Log.e("ECP: updateContact", e.message)
+                        }
+
+                        override fun onSubscribe(d: Disposable) {
+                        }
+
+                        override fun onSuccess(contact: Contact) {
+                            Log.d("ECP: updateContact", "Contact: " + contact.name)
+                            view.navigateToContactDetails(contact)
+                        }
+                    })
+        }
+    }
+
     private fun validateInput(name: String, birthDate: String): Boolean {
         val results = ValidationUtil.validateAddContactInput(name, birthDate, Cache.getPhoneNumbers(), Cache.getEmails())
 
@@ -183,11 +215,13 @@ class EditContactPresenter(val view: EditContactContract.EditContactView, val co
 
         if (results[ValidationUtil.PHONE_NUMBERS_KEY] != ValidationUtil.NO_ERRORS) {
             view.showPhoneNumbersListError(errorMessage = results[ValidationUtil.PHONE_NUMBERS_KEY] as String)
+            proceed = false
         } else
             view.disableFieldError(field = ValidationUtil.PHONE_NUMBERS_KEY)
 
         if (results[ValidationUtil.EMAILS_KEY] != ValidationUtil.NO_ERRORS) {
             view.showEmailsListError(errorMessage = results[ValidationUtil.EMAILS_KEY] as String)
+            proceed = false
         } else
             view.disableFieldError(field = ValidationUtil.EMAILS_KEY)
 

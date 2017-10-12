@@ -122,10 +122,16 @@ class ContactDetailsActivity : AppCompatActivity(), ContactDetailsContract.Conta
 
     override fun navigateToHome() {
         HomeActivity.start(this@ContactDetailsActivity)
+        finish()
     }
 
     fun editContact(v: View) {
         EditContactActivity.start(this@ContactDetailsActivity, contactId)
         Cache.setTempUser(contactId)
+        finish()
+    }
+
+    override fun onBackPressed() {
+        navigateToHome()
     }
 }
