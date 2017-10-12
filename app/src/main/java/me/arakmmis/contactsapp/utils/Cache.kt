@@ -53,4 +53,10 @@ object Cache {
     }
 
     fun removeEmails() = Hawk.delete(Const.EMAIL_ADDRESSES_KEY)
+
+    fun setTempUser(contactId: Int) = Hawk.put(Const.CONTACT_ID_KEY, contactId)
+
+    fun getTempUser(): Int? = Hawk.get(Const.CONTACT_ID_KEY)
+
+    fun removeTempUser() = Hawk.delete(Const.CONTACT_ID_KEY)
 }

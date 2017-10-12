@@ -14,6 +14,7 @@ import me.arakmmis.contactsapp.mvpcontracts.HomeContract
 import me.arakmmis.contactsapp.ui.add.AddContactActivity
 import me.arakmmis.contactsapp.ui.details.ContactDetailsActivity
 import me.arakmmis.contactsapp.ui.home.adapter.ContactsAdapter
+import me.arakmmis.contactsapp.utils.Cache
 import me.arakmmis.contactsapp.utils.Callback
 
 /**
@@ -58,5 +59,10 @@ class HomeActivity : AppCompatActivity(), HomeContract.HomeView, Callback<Contac
 
     fun addContact(v: View) {
         AddContactActivity.start(this@HomeActivity)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Cache.removeTempUser()
     }
 }

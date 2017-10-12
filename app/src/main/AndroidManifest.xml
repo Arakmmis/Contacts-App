@@ -32,6 +32,11 @@
             android:name=".ui.add.AddContactActivity"
             android:parentActivityName=".ui.home.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".ui.edit.EditContactActivity"
+            android:parentActivityName=".ui.details.ContactDetailsActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

@@ -20,15 +20,17 @@ import me.arakmmis.contactsapp.businesslogic.models.EmailAddress
 import me.arakmmis.contactsapp.businesslogic.models.PhoneNumber
 import me.arakmmis.contactsapp.mvpcontracts.ContactDetailsContract
 import me.arakmmis.contactsapp.ui.details.adapter.DetailsAdapter
+import me.arakmmis.contactsapp.ui.edit.EditContactActivity
 import me.arakmmis.contactsapp.ui.home.HomeActivity
+import me.arakmmis.contactsapp.utils.Cache
 import me.arakmmis.contactsapp.utils.Const
 
 class ContactDetailsActivity : AppCompatActivity(), ContactDetailsContract.ContactDetailsView {
 
     lateinit var presenter: ContactDetailsContract.ContactDetailsPresenter
 
-    val contactId by lazy {
-        intent.extras.getInt(Const.CONTACT_ID_KEY)
+    private val contactId by lazy {
+        Cache.getTempUser() ?: intent.extras.getInt(Const.CONTACT_ID_KEY)
     }
 
     companion object {
@@ -123,6 +125,7 @@ class ContactDetailsActivity : AppCompatActivity(), ContactDetailsContract.Conta
     }
 
     fun editContact(v: View) {
-
+        EditContactActivity.start(this@ContactDetailsActivity, contactId)
+        Cache.setTempUser(contactId)
     }
 }
