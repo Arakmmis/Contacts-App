@@ -128,4 +128,53 @@ class TestContactsRepo : ContactsManager {
             received.onSuccess(contact)
         }
     }
+
+    override fun lookForContacts(query: String): Single<List<Contact>> {
+        return Single.create { received: SingleEmitter<List<Contact>> ->
+            received.onSuccess(Arrays.asList(
+                    Contact(
+                            profilePic = ByteArrayUtil.fromBitmap(BitmapFactory.decodeResource(App.instance?.resources, R.drawable.placeholder_add_profile_pic)),
+                            name = "Abdel Rahman Abdel Kader",
+                            dateOfBirth = "20 Feb 1996",
+                            phoneNumbers = RealmList<PhoneNumber>(PhoneNumber("+201127400311", "Work"), PhoneNumber("01127400311", "Other"),
+                                    PhoneNumber("55525000", "School")),
+                            defaultPhoneNumber = "01127400311",
+                            addresses = RealmList<Address>(Address("6 Omar Bin El 5atab, El Agamy, El Mror Str.", "Home")),
+                            emailAddresses = RealmList<EmailAddress>(EmailAddress("arakmmis@gmail.com", "Work"), EmailAddress("arakmmis@outlook.com", "Personal"),
+                                    EmailAddress("devil-play@hotmail.com", "School"))
+                    ),
+                    Contact(
+                            profilePic = ByteArrayUtil.fromBitmap(BitmapFactory.decodeResource(App.instance?.resources, R.drawable.placeholder_add_profile_pic)),
+                            name = "Mohamed Ahmed",
+                            dateOfBirth = "1 Jan 1995",
+                            phoneNumbers = RealmList<PhoneNumber>(PhoneNumber("01127498172", "Other"), PhoneNumber("+20191827111", "Home"),
+                                    PhoneNumber("98021789042", "Home")),
+                            defaultPhoneNumber = "98021789042",
+                            addresses = RealmList<Address>(Address("6 Omar Bin El 5atab, El Agamy, El Mror Str., Alexandria, Egypt", "Home")),
+                            emailAddresses = RealmList<EmailAddress>(EmailAddress("worube@p33.org", "Work"), EmailAddress("wabinizo@p33.org", "Other"))
+                    ),
+                    Contact(
+                            4,
+                            ByteArrayUtil.fromBitmap(BitmapFactory.decodeResource(App.instance?.resources, R.drawable.placeholder_add_profile_pic)), "Islam El Desoky",
+                            "1 Aug 1995",
+                            RealmList<PhoneNumber>(PhoneNumber("+98162874962", "Work"), PhoneNumber("0507791448", "Home")),
+                            "0507791448",
+                            RealmList<Address>(Address("6 Omar Bin El 5atab", "Home"), Address("2768 Peck Street", "Other"),
+                                    Address("2090 Briarwood Drive", "Work")),
+                            RealmList<EmailAddress>(EmailAddress("tacoxubimu@p33.org", "Work"), EmailAddress("jukara@p33.org", "School"),
+                                    EmailAddress("niwupeta@p33.org", "Personal"), EmailAddress("yave@p33.org", "Personal"),
+                                    EmailAddress("kiluci@p33.org", "Other"))
+                    ),
+                    Contact(
+                            7,
+                            ByteArrayUtil.fromBitmap(BitmapFactory.decodeResource(App.instance?.resources, R.drawable.placeholder_add_profile_pic)), "Alaa Mostafa",
+                            "1 Jan 1995",
+                            RealmList<PhoneNumber>(PhoneNumber("+1-518-555-0144", "Home")),
+                            "+1-518-555-0144",
+                            RealmList<Address>(Address("6 Omar Bin El 5atab, El Agamy, El Mror Str.", "Home")),
+                            RealmList<EmailAddress>(EmailAddress("tufakiz@p33.org", "Personal"))
+                    )
+            ))
+        }
+    }
 }

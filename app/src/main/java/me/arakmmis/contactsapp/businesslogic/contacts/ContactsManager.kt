@@ -14,4 +14,6 @@ interface ContactsManager {
     fun deleteContact(contactId: Int): Single<String>
 
     fun updateContact(contact: Contact): Single<Contact>
+
+    fun lookForContacts(query: String): Single<List<Contact>>
 }

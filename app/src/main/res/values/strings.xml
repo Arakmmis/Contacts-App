@@ -6,6 +6,8 @@
     -->
     <string name="search">Search</string>
     <string name="no_contacts_to_display">No Contacts To Display</string>
+    <string name="search_contacts">Search Contacts</string>
+    <string name="search_query_hint">Search</string>
 
     <!--
         Contact Details
@@ -27,6 +29,7 @@
     <string name="add_address">Add Address</string>
     <string name="add_email_address">Add Email Address</string>
     <string name="email_address">Email Address</string>
+    <string name="empty_search_result_txt">No Contacts Found</string>
     <string-array name="phone_number_types_array">
         <item>Default</item>
         <item>Mobile</item>

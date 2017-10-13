@@ -2,6 +2,7 @@ package me.arakmmis.contactsapp.businesslogic.contacts
 
 import io.reactivex.Single
 import io.reactivex.SingleEmitter
+import io.realm.Case
 import io.realm.Realm
 import io.realm.Sort
 import me.arakmmis.contactsapp.R
@@ -66,6 +67,31 @@ class ContactsRepo : ContactsManager {
         getRealmInstance().executeTransaction { realm ->
             realm.copyToRealmOrUpdate(contact)
             received.onSuccess(realm.copyFromRealm(realm.where(Contact::class.java).equalTo("id", contact.id).findFirst()))
+        }
+
+        getRealmInstance().close()
+    }
+
+    override fun lookForContacts(query: String): Single<List<Contact>> = Single.create { received: SingleEmitter<List<Contact>> ->
+        getRealmInstance().executeTransaction { realm ->
+            val realmContacts = realm.where(Contact::class.java)
+                    .contains("name", query, Case.INSENSITIVE)
+                    .or()
+                    .contains("phoneNumbers.number", query, Case.INSENSITIVE)
+                    .or()
+                    .contains("addresses.address", query, Case.INSENSITIVE)
+                    .or()
+                    .contains("emailAddresses.emailAddress", query, Case.INSENSITIVE)
+                    .or()
+                    .contains("dateOfBirth", query, Case.INSENSITIVE)
+                    .findAll()
+                    .sort("name", Sort.ASCENDING)
+
+            val copiedFromRealm = realm.copyFromRealm(realmContacts)
+            val contacts: ArrayList<Contact> = ArrayList<Contact>()
+            copiedFromRealm.forEach { contact -> contacts.add(contact) }
+
+            received.onSuccess(contacts)
         }
 
         getRealmInstance().close()

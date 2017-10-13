@@ -37,6 +37,10 @@
             android:name=".ui.edit.EditContactActivity"
             android:parentActivityName=".ui.details.ContactDetailsActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+
+        <meta-data
+            android:name="searchable"
+            android:resource="@xml/searchable" />
     </application>
 
 </manifest>
