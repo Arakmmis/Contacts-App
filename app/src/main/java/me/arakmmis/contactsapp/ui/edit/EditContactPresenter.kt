@@ -180,6 +180,47 @@ class EditContactPresenter(val view: EditContactContract.EditContactView, val co
         view.updateAddressList(newAddresses)
     }
 
+    override fun editAddress(newAddress: Address, oldAddress: Address, position: Int) {
+        val result = ValidationUtil.errorsInAddress(newAddress.address)
+
+        if (result == ValidationUtil.NO_ERRORS) {
+            if (newAddress.address == oldAddress.address &&
+                    newAddress.type == oldAddress.type) {
+
+                view.updateAddressList(Cache.getAddresses())
+
+            } else if (newAddress.address == oldAddress.address &&
+                    newAddress.type != oldAddress.type) {
+
+                val newAddresses = Cache.getAddresses()
+
+                newAddresses.set(position, newAddress)
+                Cache.setAddresses(newAddresses)
+                view.updateAddressList(newAddresses)
+            } else {
+
+                var exists = false
+
+                Cache.getAddresses().forEach { existingAddress ->
+                    if (newAddress.address == existingAddress.address)
+                        exists = true
+                }
+
+                if (!exists) {
+                    val newAddresses = Cache.getAddresses()
+
+                    newAddresses.set(position, newAddress)
+                    Cache.setAddresses(newAddresses)
+                    view.updateAddressList(newAddresses)
+                } else {
+                    view.showAddressError("Address Already Exists")
+                }
+            }
+        } else {
+            view.showAddressError(result)
+        }
+    }
+
     override fun addEmailAddress(email: EmailAddress) {
         val result = ValidationUtil.errorsInEmail(email.emailAddress)
 
@@ -216,6 +257,47 @@ class EditContactPresenter(val view: EditContactContract.EditContactView, val co
 
         Cache.setEmails(newEmails)
         view.updateEmailAddressesList(newEmails)
+    }
+
+    override fun editEmailAddress(newEmail: EmailAddress, oldEmail: EmailAddress, position: Int) {
+        val result = ValidationUtil.errorsInEmail(newEmail.emailAddress)
+
+        if (result == ValidationUtil.NO_ERRORS) {
+            if (newEmail.emailAddress == oldEmail.emailAddress &&
+                    newEmail.type == oldEmail.type) {
+
+                view.updateEmailAddressesList(Cache.getEmails())
+
+            } else if (newEmail.emailAddress == oldEmail.emailAddress &&
+                    newEmail.type != oldEmail.type) {
+
+                val newEmails = Cache.getEmails()
+
+                newEmails.set(position, newEmail)
+                Cache.setEmails(newEmails)
+                view.updateEmailAddressesList(newEmails)
+            } else {
+
+                var exists = false
+
+                Cache.getEmails().forEach { existingEmail ->
+                    if (newEmail.emailAddress == existingEmail.emailAddress)
+                        exists = true
+                }
+
+                if (!exists) {
+                    val newEmails = Cache.getEmails()
+
+                    newEmails.set(position, newEmail)
+                    Cache.setEmails(newEmails)
+                    view.updateEmailAddressesList(newEmails)
+                } else {
+                    view.showEmailAddressError("Email Address Already Exists")
+                }
+            }
+        } else {
+            view.showEmailAddressError(result)
+        }
     }
 
     override fun updateContact(contactId: Int, profilePic: ByteArray, name: String, date: String) {

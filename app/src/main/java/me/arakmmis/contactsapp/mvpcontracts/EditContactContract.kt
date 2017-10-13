@@ -51,5 +51,9 @@ interface EditContactContract {
         fun updateContact(contactId: Int, profilePic: ByteArray, name: String, date: String)
 
         fun editPhoneNumber(newPhoneNumber: PhoneNumber, oldPhoneNumber: PhoneNumber, position: Int)
+
+        fun editAddress(newAddress: Address, oldAddress: Address, position: Int)
+
+        fun editEmailAddress(newEmail: EmailAddress, oldEmail: EmailAddress, position: Int)
     }
 }

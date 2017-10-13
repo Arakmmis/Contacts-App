@@ -136,7 +136,7 @@ class EditContactActivity : AllowMeActivity(), EditContactContract.EditContactVi
                                 Cache.getAddresses(),
                                 object : EditContactCallback<Address> {
                                     override fun onEditClicked(item: Address, position: Int) {
-
+                                        editAddress(item, position)
                                     }
 
                                     override fun onDeleteClicked(item: Address) {
@@ -163,7 +163,7 @@ class EditContactActivity : AllowMeActivity(), EditContactContract.EditContactVi
                                 Cache.getEmails(),
                                 object : EditContactCallback<EmailAddress> {
                                     override fun onEditClicked(item: EmailAddress, position: Int) {
-
+                                        editEmailAddress(item, position)
                                     }
 
                                     override fun onDeleteClicked(item: EmailAddress) {
@@ -416,6 +416,7 @@ class EditContactActivity : AllowMeActivity(), EditContactContract.EditContactVi
 
     override fun showPhoneNumberError(errorMessage: String) {
         dvAddPhoneNumber?.til_phone_number?.error = errorMessage
+        dvEditPhoneNumber?.til_phone_number?.error = errorMessage
     }
 
     override fun updatePhoneList(phoneNumbers: List<PhoneNumber>) {
@@ -448,14 +449,40 @@ class EditContactActivity : AllowMeActivity(), EditContactContract.EditContactVi
         adAddAddress?.show()
     }
 
+    fun editAddress(address: Address, position: Int) {
+        dvEditAddress = layoutInflater.inflate(R.layout.add_contact_dialog_address, null)
+        adEditAddress = AlertDialog.Builder(this).setView(dvEditAddress).create()
+
+        val adapterAddress = ArrayAdapter.createFromResource(dvEditAddress?.context,
+                R.array.address_types_array, android.R.layout.simple_spinner_item)
+
+        adapterAddress.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        dvEditAddress?.spinner_address_type?.adapter = adapterAddress
+
+        dvEditAddress?.et_address?.setText(address.address)
+
+        dvEditAddress?.ok_a?.setOnClickListener { _ ->
+            presenter.editAddress(Address(address = dvEditAddress?.et_address?.text.toString().trim(),
+                    type = dvEditAddress?.spinner_address_type?.selectedItem.toString()), address, position)
+        }
+
+        dvEditAddress?.cancel_a?.setOnClickListener { _ ->
+            adEditAddress?.dismiss()
+        }
+
+        adEditAddress?.show()
+    }
+
     override fun showAddressError(errorMessage: String) {
         dvAddAddress?.til_address?.error = errorMessage
+        dvEditAddress?.til_address?.error = errorMessage
     }
 
     override fun updateAddressList(addresses: List<Address>) {
         adapterAddresses.setData(addresses)
 
         adAddAddress?.dismiss()
+        adEditAddress?.dismiss()
     }
 
     fun addEmailAddress(v: View) {
@@ -480,14 +507,40 @@ class EditContactActivity : AllowMeActivity(), EditContactContract.EditContactVi
         adAddEmailAddress?.show()
     }
 
+    fun editEmailAddress(email: EmailAddress, position: Int) {
+        dvEditEmailAddress = layoutInflater.inflate(R.layout.add_contact_dialog_email_address, null)
+        adEditEmailAddress = AlertDialog.Builder(this).setView(dvEditEmailAddress).create()
+
+        val adapterEmailAddress = ArrayAdapter.createFromResource(dvEditEmailAddress?.context,
+                R.array.email_address_array, android.R.layout.simple_spinner_item)
+
+        adapterEmailAddress.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        dvEditEmailAddress?.spinner_email_address_type?.adapter = adapterEmailAddress
+
+        dvEditEmailAddress?.et_email_address?.setText(email.emailAddress)
+
+        dvEditEmailAddress?.ok_ea?.setOnClickListener { _ ->
+            presenter.editEmailAddress(EmailAddress(emailAddress = dvEditEmailAddress?.et_email_address?.text.toString().trim(),
+                    type = dvEditEmailAddress?.spinner_email_address_type?.selectedItem.toString()), email, position)
+        }
+
+        dvEditEmailAddress?.cancel_ea?.setOnClickListener { _ ->
+            adEditEmailAddress?.dismiss()
+        }
+
+        adEditEmailAddress?.show()
+    }
+
     override fun showEmailAddressError(errorMessage: String) {
         dvAddEmailAddress?.til_email_address?.error = errorMessage
+        dvEditEmailAddress?.til_email_address?.error = errorMessage
     }
 
     override fun updateEmailAddressesList(emails: List<EmailAddress>) {
         adapterEmailAddress.setData(emails)
 
         adAddEmailAddress?.dismiss()
+        adEditEmailAddress?.dismiss()
         disableFieldError(ValidationUtil.EMAILS_KEY)
     }
 
