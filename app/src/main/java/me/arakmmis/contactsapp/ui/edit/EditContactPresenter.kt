@@ -89,6 +89,59 @@ class EditContactPresenter(val view: EditContactContract.EditContactView, val co
         }
     }
 
+    override fun editPhoneNumber(newPhoneNumber: PhoneNumber, oldPhoneNumber: PhoneNumber, position: Int) {
+        val result = ValidationUtil.errorsInPhoneNumber(newPhoneNumber.number)
+
+        if (result == ValidationUtil.NO_ERRORS) {
+            if (newPhoneNumber.number == oldPhoneNumber.number &&
+                    newPhoneNumber.type == oldPhoneNumber.type) {
+
+                view.updatePhoneList(Cache.getPhoneNumbers())
+
+            } else if (newPhoneNumber.number == oldPhoneNumber.number &&
+                    newPhoneNumber.type != oldPhoneNumber.type) {
+
+                if (newPhoneNumber.type == "Default") {
+                    Cache.setDefaultTypeUsed(true)
+                } else if (oldPhoneNumber.type == "Default" && newPhoneNumber.type != "Default") {
+                    Cache.setDefaultTypeUsed(false)
+                }
+
+                val newNumbers = Cache.getPhoneNumbers()
+
+                newNumbers.set(position, newPhoneNumber)
+                Cache.setPhoneNumbers(newNumbers)
+                view.updatePhoneList(newNumbers)
+            } else {
+
+                var exists = false
+
+                Cache.getPhoneNumbers().forEach { existingPhoneNumber ->
+                    if (newPhoneNumber.number == existingPhoneNumber.number)
+                        exists = true
+                }
+
+                if (!exists) {
+                    if (newPhoneNumber.type == "Default") {
+                        Cache.setDefaultTypeUsed(true)
+                    } else if (oldPhoneNumber.type == "Default" && newPhoneNumber.type != "Default") {
+                        Cache.setDefaultTypeUsed(false)
+                    }
+
+                    val newNumbers = Cache.getPhoneNumbers()
+
+                    newNumbers.set(position, newPhoneNumber)
+                    Cache.setPhoneNumbers(newNumbers)
+                    view.updatePhoneList(newNumbers)
+                } else {
+                    view.showPhoneNumberError("Phone Number Already Exists")
+                }
+            }
+        } else {
+            view.showPhoneNumberError(result)
+        }
+    }
+
     override fun addAddress(address: Address) {
         val result = ValidationUtil.errorsInAddress(address.address)
 
@@ -173,7 +226,7 @@ class EditContactPresenter(val view: EditContactContract.EditContactView, val co
                     dateOfBirth = date,
                     phoneNumbers = ListUtil<PhoneNumber>().listToRealmList(Cache.getPhoneNumbers()),
                     defaultPhoneNumber = if (Cache.getPhoneNumbers().filter { phoneNumber -> phoneNumber.type == "Default" }.isEmpty()) Cache.getPhoneNumbers()[0].number
-                                else Cache.getPhoneNumbers().filter { phoneNumber -> phoneNumber.type == "Default" }[0].number,
+                    else Cache.getPhoneNumbers().filter { phoneNumber -> phoneNumber.type == "Default" }[0].number,
                     addresses = ListUtil<Address>().listToRealmList(Cache.getAddresses()),
                     emailAddresses = ListUtil<EmailAddress>().listToRealmList(Cache.getEmails()))
 

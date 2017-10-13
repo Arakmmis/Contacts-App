@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import me.arakmmis.contactsapp.R
 import me.arakmmis.contactsapp.businesslogic.models.Contact
-import me.arakmmis.contactsapp.utils.Callback
+import me.arakmmis.contactsapp.customlisteners.Callback
 
 class ContactsAdapter(val listener: Callback<Contact>, var contacts: List<Contact>) : RecyclerView.Adapter<ContactViewHolder>() {
 

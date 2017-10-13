@@ -3,7 +3,7 @@ package me.arakmmis.contactsapp.ui.add.adapter
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import me.arakmmis.contactsapp.utils.Callback
+import me.arakmmis.contactsapp.customlisteners.Callback
 
 class DetailsAdapter<T>(val layout: Int, private var t: ArrayList<T>, val callback: Callback<T>) : RecyclerView.Adapter<DetailsViewHolder<T>>() {
 

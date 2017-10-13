@@ -30,7 +30,7 @@ import me.arakmmis.contactsapp.ui.add.adapter.DetailsAdapter
 import me.arakmmis.contactsapp.ui.details.ContactDetailsActivity
 import me.arakmmis.contactsapp.utils.ByteArrayUtil
 import me.arakmmis.contactsapp.utils.Cache
-import me.arakmmis.contactsapp.utils.Callback
+import me.arakmmis.contactsapp.customlisteners.Callback
 import me.arakmmis.contactsapp.utils.ValidationUtil
 import pl.aprilapps.easyphotopicker.DefaultCallback
 import pl.aprilapps.easyphotopicker.EasyImage

@@ -49,5 +49,7 @@ interface EditContactContract {
         fun deleteEmailAddress(email: EmailAddress)
 
         fun updateContact(contactId: Int, profilePic: ByteArray, name: String, date: String)
+
+        fun editPhoneNumber(newPhoneNumber: PhoneNumber, oldPhoneNumber: PhoneNumber, position: Int)
     }
 }

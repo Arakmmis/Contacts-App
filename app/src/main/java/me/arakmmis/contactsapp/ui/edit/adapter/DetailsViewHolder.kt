@@ -9,9 +9,9 @@ import kotlinx.android.synthetic.main.edit_contact_rv_item_phone_number.view.*
 import me.arakmmis.contactsapp.businesslogic.models.Address
 import me.arakmmis.contactsapp.businesslogic.models.EmailAddress
 import me.arakmmis.contactsapp.businesslogic.models.PhoneNumber
-import me.arakmmis.contactsapp.utils.Callback
+import me.arakmmis.contactsapp.customlisteners.EditContactCallback
 
-class DetailsViewHolder<T>(itemView: View?, private val callback: Callback<T>) : RecyclerView.ViewHolder(itemView) {
+class DetailsViewHolder<T>(itemView: View?, private val callback: EditContactCallback<T>) : RecyclerView.ViewHolder(itemView) {
 
     var t: T? = null
 
@@ -31,7 +31,11 @@ class DetailsViewHolder<T>(itemView: View?, private val callback: Callback<T>) :
         itemView?.tv_phone_number_type?.text = phoneNumber.type
 
         itemView?.iv_delete_pn?.setOnClickListener {
-            callback.onClick(t!!)
+            callback.onDeleteClicked(t!!)
+        }
+
+        itemView?.iv_edit_pn?.setOnClickListener {
+            callback.onEditClicked(t!!, adapterPosition)
         }
     }
 
@@ -40,7 +44,11 @@ class DetailsViewHolder<T>(itemView: View?, private val callback: Callback<T>) :
         itemView?.tv_email_address_type?.text = emailAddress.type
 
         itemView?.iv_delete_ea?.setOnClickListener { _ ->
-            callback.onClick(t!!)
+            callback.onDeleteClicked(t!!)
+        }
+
+        itemView?.iv_edit_ea?.setOnClickListener {
+            callback.onEditClicked(t!!, adapterPosition)
         }
     }
 
@@ -49,7 +57,11 @@ class DetailsViewHolder<T>(itemView: View?, private val callback: Callback<T>) :
         itemView?.tv_address_type?.text = address.type
 
         itemView?.iv_delete_a?.setOnClickListener { _ ->
-            callback.onClick(t!!)
+            callback.onDeleteClicked(t!!)
+        }
+
+        itemView?.iv_edit_a?.setOnClickListener {
+            callback.onEditClicked(t!!, adapterPosition)
         }
     }
 }

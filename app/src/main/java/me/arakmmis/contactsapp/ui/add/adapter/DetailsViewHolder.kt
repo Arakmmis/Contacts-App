@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.add_contact_rv_item_phone_number.view.*
 import me.arakmmis.contactsapp.businesslogic.models.Address
 import me.arakmmis.contactsapp.businesslogic.models.EmailAddress
 import me.arakmmis.contactsapp.businesslogic.models.PhoneNumber
-import me.arakmmis.contactsapp.utils.Callback
+import me.arakmmis.contactsapp.customlisteners.Callback
 
 class DetailsViewHolder<T>(itemView: View?, private val callback: Callback<T>) : RecyclerView.ViewHolder(itemView) {
 

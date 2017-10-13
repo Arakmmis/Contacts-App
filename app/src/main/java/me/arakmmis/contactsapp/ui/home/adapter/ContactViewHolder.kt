@@ -8,7 +8,7 @@ import android.view.View
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.home_rv_item_contact.view.*
 import me.arakmmis.contactsapp.businesslogic.models.Contact
-import me.arakmmis.contactsapp.utils.Callback
+import me.arakmmis.contactsapp.customlisteners.Callback
 
 
 class ContactViewHolder(itemView: View?, listener: Callback<Contact>) : RecyclerView.ViewHolder(itemView) {

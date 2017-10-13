@@ -15,7 +15,7 @@ import me.arakmmis.contactsapp.ui.add.AddContactActivity
 import me.arakmmis.contactsapp.ui.details.ContactDetailsActivity
 import me.arakmmis.contactsapp.ui.home.adapter.ContactsAdapter
 import me.arakmmis.contactsapp.utils.Cache
-import me.arakmmis.contactsapp.utils.Callback
+import me.arakmmis.contactsapp.customlisteners.Callback
 
 /**
  * Created by arakm on 10/4/2017.
