@@ -41,7 +41,7 @@ class DetailsViewHolder<T>(itemView: View?) : RecyclerView.ViewHolder(itemView) 
         itemView?.ll_phone_number_details?.setOnLongClickListener(object : View.OnLongClickListener {
             override fun onLongClick(v: View?): Boolean {
                 // Copy To Clipboard
-                Toast.makeText(itemView.context, "Phone Number Copied to Clipboard!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(itemView.context, "Phone Number Copied to Clipboard", Toast.LENGTH_SHORT).show()
                 return true
             }
         })
@@ -55,9 +55,9 @@ class DetailsViewHolder<T>(itemView: View?) : RecyclerView.ViewHolder(itemView) 
         itemView?.tv_email_address?.text = emailAddress.emailAddress
         itemView?.tv_email_address_type?.text = emailAddress.type
 
-        itemView?.tv_email_address?.setOnClickListener { _ ->
+        itemView?.ll_email_address_details?.setOnClickListener { _ ->
             // Copy To Clipboard
-            Toast.makeText(itemView.context, "Email Address Copied to Clipboard!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(itemView.context, "Email Address Copied to Clipboard", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -65,9 +65,9 @@ class DetailsViewHolder<T>(itemView: View?) : RecyclerView.ViewHolder(itemView) 
         itemView?.tv_address?.text = address.address
         itemView?.tv_address_type?.text = address.type
 
-        itemView?.tv_address?.setOnClickListener { _ ->
+        itemView?.ll_address_details?.setOnClickListener { _ ->
             // Copy To Clipboard
-            Toast.makeText(itemView.context, "Address Copied to Clipboard!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(itemView.context, "Address Copied to Clipboard", Toast.LENGTH_SHORT).show()
         }
     }
 }
