@@ -25,12 +25,13 @@ import me.arakmmis.contactsapp.businesslogic.models.Address
 import me.arakmmis.contactsapp.businesslogic.models.Contact
 import me.arakmmis.contactsapp.businesslogic.models.EmailAddress
 import me.arakmmis.contactsapp.businesslogic.models.PhoneNumber
+import me.arakmmis.contactsapp.customlisteners.Callback
 import me.arakmmis.contactsapp.mvpcontracts.AddContactContract
 import me.arakmmis.contactsapp.ui.add.adapter.DetailsAdapter
 import me.arakmmis.contactsapp.ui.details.ContactDetailsActivity
+import me.arakmmis.contactsapp.ui.home.HomeActivity
 import me.arakmmis.contactsapp.utils.ByteArrayUtil
 import me.arakmmis.contactsapp.utils.Cache
-import me.arakmmis.contactsapp.customlisteners.Callback
 import me.arakmmis.contactsapp.utils.ValidationUtil
 import pl.aprilapps.easyphotopicker.DefaultCallback
 import pl.aprilapps.easyphotopicker.EasyImage
@@ -367,11 +368,11 @@ class AddContactActivity : AllowMeActivity(), AddContactContract.AddContactView,
         tv_birth_date.setTextColor(Color.argb(255, 255, 0, 0))
     }
 
-    override fun showPhoneNumbersListError(errorMessage: String) {
+    override fun showPhoneNumbersListError() {
         iv_add_phone_number.setColorFilter(Color.argb(255, 255, 0, 0))
     }
 
-    override fun showEmailsListError(errorMessage: String) {
+    override fun showEmailsListError() {
         iv_add_email_address.setColorFilter(Color.argb(255, 255, 0, 0))
     }
 
@@ -382,5 +383,9 @@ class AddContactActivity : AllowMeActivity(), AddContactContract.AddContactView,
             ValidationUtil.PHONE_NUMBERS_KEY -> iv_add_phone_number.setColorFilter(Color.argb(255, 174, 174, 174))
             ValidationUtil.EMAILS_KEY -> iv_add_email_address.setColorFilter(Color.argb(255, 174, 174, 174))
         }
+    }
+
+    override fun onBackPressed() {
+        HomeActivity.start(this@AddContactActivity)
     }
 }

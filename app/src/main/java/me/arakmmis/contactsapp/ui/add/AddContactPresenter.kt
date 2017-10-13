@@ -53,20 +53,18 @@ class AddContactPresenter(private val addContactView: AddContactContract.AddCont
             Cache.setDefaultTypeUsed(false)
         }
 
-        val itemToBeDeleted = Cache.getPhoneNumbers().indexOf(phoneNumber)
-
-        val newNumbers: List<PhoneNumber>
-
         if (Cache.getPhoneNumbers().size == 1) {
-            newNumbers = ArrayList<PhoneNumber>()
+            Cache.setPhoneNumbers(ArrayList<PhoneNumber>())
+            addContactView.updatePhoneList(Cache.getPhoneNumbers())
         } else {
-            val numbersBeforeDeleted = Cache.getPhoneNumbers().slice(IntRange(0, itemToBeDeleted - 1))
-            val numbersAfterDeleted = Cache.getPhoneNumbers().slice(IntRange(itemToBeDeleted + 1, Cache.getPhoneNumbers().size - 1))
-            newNumbers = numbersBeforeDeleted + numbersAfterDeleted
+            val newNumbers = ArrayList<PhoneNumber>()
+            Cache.getPhoneNumbers().forEach { existingPhoneNumber ->
+                if (phoneNumber.number != existingPhoneNumber.number)
+                    newNumbers.add(existingPhoneNumber)
+            }
+            Cache.setPhoneNumbers(newNumbers)
+            addContactView.updatePhoneList(newNumbers)
         }
-
-        Cache.setPhoneNumbers(newNumbers)
-        addContactView.updatePhoneList(newNumbers)
     }
 
     override fun addAddress(address: Address) {
@@ -94,16 +92,13 @@ class AddContactPresenter(private val addContactView: AddContactContract.AddCont
     }
 
     override fun deleteAddress(address: Address) {
-        val itemToBeDeleted = Cache.getAddresses().indexOf(address)
+        val newAddresses = ArrayList<Address>()
 
-        val newAddresses: List<Address>
-
-        if (Cache.getAddresses().size == 1) {
-            newAddresses = ArrayList<Address>()
-        } else {
-            val addressesBeforeDeleted = Cache.getAddresses().slice(IntRange(0, itemToBeDeleted - 1))
-            val addressesAfterDeleted = Cache.getAddresses().slice(IntRange(itemToBeDeleted + 1, Cache.getAddresses().size - 1))
-            newAddresses = addressesBeforeDeleted + addressesAfterDeleted
+        if (Cache.getAddresses().size != 1) {
+            Cache.getAddresses().forEach { existingAddress ->
+                if (address.address != existingAddress.address)
+                    newAddresses.add(existingAddress)
+            }
         }
 
         Cache.setAddresses(newAddresses)
@@ -135,16 +130,13 @@ class AddContactPresenter(private val addContactView: AddContactContract.AddCont
     }
 
     override fun deleteEmailAddress(email: EmailAddress) {
-        val itemToBeDeleted = Cache.getEmails().indexOf(email)
+        val newEmails = ArrayList<EmailAddress>()
 
-        val newEmails: List<EmailAddress>
-
-        if (Cache.getEmails().size == 1) {
-            newEmails = ArrayList<EmailAddress>()
-        } else {
-            val emailsBeforeDeleted = Cache.getEmails().slice(IntRange(0, itemToBeDeleted - 1))
-            val emailsAfterDeleted = Cache.getEmails().slice(IntRange(itemToBeDeleted + 1, Cache.getEmails().size - 1))
-            newEmails = emailsBeforeDeleted + emailsAfterDeleted
+        if (Cache.getEmails().size != 1) {
+            Cache.getEmails().forEach { existingEmail ->
+                if (email.emailAddress != existingEmail.emailAddress)
+                    newEmails.add(existingEmail)
+            }
         }
 
         Cache.setEmails(newEmails)
@@ -157,7 +149,7 @@ class AddContactPresenter(private val addContactView: AddContactContract.AddCont
                     profilePic = profilePic,
                     dateOfBirth = contactBirthDate,
                     phoneNumbers = ListUtil<PhoneNumber>().listToRealmList(Cache.getPhoneNumbers()),
-                    defaultPhoneNumber = if (Cache.getPhoneNumbers().filter { phoneNumber -> phoneNumber.type == "Default" }.isEmpty()) Cache.getPhoneNumbers()[0].number
+                    defaultPhoneNumber = if (Cache.getPhoneNumbers().none { phoneNumber -> phoneNumber.type == "Default" }) Cache.getPhoneNumbers()[0].number
                                     else Cache.getPhoneNumbers().filter { phoneNumber -> phoneNumber.type == "Default" }[0].number,
                     addresses = ListUtil<Address>().listToRealmList(Cache.getAddresses()),
                     emailAddresses = ListUtil<EmailAddress>().listToRealmList(Cache.getEmails()))
@@ -199,12 +191,14 @@ class AddContactPresenter(private val addContactView: AddContactContract.AddCont
             addContactView.disableFieldError(field = ValidationUtil.DATE_KEY)
 
         if (results[ValidationUtil.PHONE_NUMBERS_KEY] != ValidationUtil.NO_ERRORS) {
-            addContactView.showPhoneNumbersListError(errorMessage = results[ValidationUtil.PHONE_NUMBERS_KEY] as String)
+            addContactView.showPhoneNumbersListError()
+            proceed = false
         } else
             addContactView.disableFieldError(field = ValidationUtil.PHONE_NUMBERS_KEY)
 
         if (results[ValidationUtil.EMAILS_KEY] != ValidationUtil.NO_ERRORS) {
-            addContactView.showEmailsListError(errorMessage = results[ValidationUtil.EMAILS_KEY] as String)
+            addContactView.showEmailsListError()
+            proceed = false
         } else
             addContactView.disableFieldError(field = ValidationUtil.EMAILS_KEY)
 

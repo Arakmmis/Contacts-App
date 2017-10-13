@@ -29,9 +29,9 @@ interface AddContactContract {
 
         fun showDateError(errorMessage: String)
 
-        fun showPhoneNumbersListError(errorMessage: String)
+        fun showPhoneNumbersListError()
 
-        fun showEmailsListError(errorMessage: String)
+        fun showEmailsListError()
 
         fun disableFieldError(field: String)
     }

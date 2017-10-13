@@ -1,5 +1,6 @@
 package me.arakmmis.contactsapp.ui.home
 
+import android.app.Activity
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
@@ -37,8 +38,9 @@ class HomeActivity : AppCompatActivity(), HomeContract.HomeView, Callback<Contac
     private lateinit var searchView: SearchView
 
     companion object {
-        fun start(context: Context) {
-            context.startActivity(Intent(context, HomeActivity::class.java))
+        fun start(activity: Activity) {
+            activity.startActivity(Intent(activity, HomeActivity::class.java))
+            activity.finish()
         }
     }
 
