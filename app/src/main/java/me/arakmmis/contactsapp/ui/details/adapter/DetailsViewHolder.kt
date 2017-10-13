@@ -1,5 +1,8 @@
 package me.arakmmis.contactsapp.ui.details.adapter
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.support.v4.content.ContextCompat
@@ -38,13 +41,14 @@ class DetailsViewHolder<T>(itemView: View?) : RecyclerView.ViewHolder(itemView) 
             ContextCompat.startActivity(itemView.context, intent, null)
         }
 
-        itemView?.ll_phone_number_details?.setOnLongClickListener(object : View.OnLongClickListener {
-            override fun onLongClick(v: View?): Boolean {
-                // Copy To Clipboard
-                Toast.makeText(itemView.context, "Phone Number Copied to Clipboard", Toast.LENGTH_SHORT).show()
-                return true
-            }
-        })
+        itemView?.ll_phone_number_details?.setOnLongClickListener {
+            // Copy To Clipboard
+            val clipboard = itemView.context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText("Address", phoneNumber.number)
+            clipboard.primaryClip = clip
+            Toast.makeText(itemView.context, "Phone Number Copied to Clipboard", Toast.LENGTH_SHORT).show()
+            true
+        }
 
         itemView?.iv_message?.setOnClickListener { _ ->
             startActivity(itemView.context, Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", phoneNumber.number, null)), null)
@@ -57,6 +61,9 @@ class DetailsViewHolder<T>(itemView: View?) : RecyclerView.ViewHolder(itemView) 
 
         itemView?.ll_email_address_details?.setOnClickListener { _ ->
             // Copy To Clipboard
+            val clipboard = itemView.context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText("Address", emailAddress.emailAddress)
+            clipboard.primaryClip = clip
             Toast.makeText(itemView.context, "Email Address Copied to Clipboard", Toast.LENGTH_SHORT).show()
         }
     }
@@ -67,6 +74,9 @@ class DetailsViewHolder<T>(itemView: View?) : RecyclerView.ViewHolder(itemView) 
 
         itemView?.ll_address_details?.setOnClickListener { _ ->
             // Copy To Clipboard
+            val clipboard = itemView.context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText("Address", address.address)
+            clipboard.primaryClip = clip
             Toast.makeText(itemView.context, "Address Copied to Clipboard", Toast.LENGTH_SHORT).show()
         }
     }

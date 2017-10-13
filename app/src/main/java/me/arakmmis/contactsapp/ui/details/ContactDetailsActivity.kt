@@ -107,6 +107,7 @@ class ContactDetailsActivity : AppCompatActivity(), ContactDetailsContract.Conta
 
         dialogView.ok.setOnClickListener { _ ->
             presenter.deleteContact(contactId)
+            alertDialog.dismiss()
         }
 
         dialogView.cancel.setOnClickListener { _ ->
