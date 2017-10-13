@@ -130,4 +130,13 @@ class HomeActivity : AppCompatActivity(), HomeContract.HomeView, Callback<Contac
     override fun toast(message: String) {
         Toast.makeText(this@HomeActivity, message, Toast.LENGTH_SHORT).show()
     }
+
+    override fun setSearchResult(contacts: List<Contact>) {
+        if (adapterContacts == null) {
+            adapterContacts = ContactsAdapter(this, contacts)
+            rv_contacts.adapter = adapterContacts
+        } else {
+            adapterContacts?.setData(contacts)
+        }
+    }
 }

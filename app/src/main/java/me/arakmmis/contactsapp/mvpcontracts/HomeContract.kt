@@ -8,6 +8,8 @@ interface HomeContract {
         fun setContacts(contacts: List<Contact>)
 
         fun toast(message: String)
+
+        fun setSearchResult(contacts: List<Contact>)
     }
 
     interface HomePresenter {

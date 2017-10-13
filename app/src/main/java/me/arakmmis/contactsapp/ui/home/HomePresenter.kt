@@ -55,8 +55,9 @@ class HomePresenter(val homeView: HomeContract.HomeView) : HomeContract.HomePres
                     override fun onSuccess(result: List<Contact>) {
                         if (result.isEmpty()) {
                             homeView.toast(App.instance?.getString(R.string.empty_search_result_txt)!!)
+                            homeView.setSearchResult(ArrayList<Contact>())
                         } else {
-                            homeView.setContacts(result)
+                            homeView.setSearchResult(result)
                         }
                     }
                 })
